@@ -1,0 +1,16 @@
+{
+    // TypeScript configuration
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.suggest.completeFunctionCalls": true,
+    // Editor configuration
+    "editor.insertSpaces": true,
+    "editor.trimAutoWhitespace": true,
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true,
+    "editor.minimap.enabled": false,
+    "files.exclude": {
+        "**/*.log": true,
+        "**/.angular": true,
+        "**/node_modules": true
+    }
+}
