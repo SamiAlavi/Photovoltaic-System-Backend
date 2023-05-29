@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 
 // Middlewares
-import swaggerMiddleware from './middlewares/swaggerMiddleware';
+import swaggerRoute from './routers/swaggerRoute';
 
 dotenv.config();
 
@@ -10,7 +10,7 @@ const app: Express = express();
 const port = process.env.PORT ?? 3000;
 
 if (process.env.ENVIRONMENT === 'development') {
-    app.use(swaggerMiddleware);
+    app.use(swaggerRoute);
 }
 
 app.get('/', (req: Request, res: Response) => {
