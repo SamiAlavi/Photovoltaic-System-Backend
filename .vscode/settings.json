@@ -8,9 +8,9 @@
     "editor.tabSize": 4,
     "editor.formatOnSave": true,
     "editor.minimap.enabled": false,
+    "files.insertFinalNewline": true,
     "files.exclude": {
         "**/*.log": true,
-        "**/.angular": true,
         "**/node_modules": true
-    }
+    },
 }
