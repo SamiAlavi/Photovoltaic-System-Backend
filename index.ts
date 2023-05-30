@@ -1,15 +1,13 @@
 import express, { Express, Request, Response } from 'express';
-import dotenv from 'dotenv';
+import environment from './env';
 
-// Middlewares
+// Routers
 import swaggerRoute from './routers/swaggerRoute';
 
-dotenv.config();
-
 const app: Express = express();
-const port = process.env.PORT ?? 3000;
+const port = environment.PORT;
 
-if (process.env.ENVIRONMENT === 'development') {
+if (environment.ENVIRONMENT === 'development') {
     app.use(swaggerRoute);
 }
 

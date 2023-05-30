@@ -1,8 +1,8 @@
 import admin from 'firebase-admin';
-const serviceAccount = "services/firebase/serviceAccount.json"
+import enviroment from '../../env';
 
 const app = admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(enviroment.FIREBASE_SERVICEACCOUNT)
 });
 
 export { app };
