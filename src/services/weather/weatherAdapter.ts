@@ -2,8 +2,8 @@ import openWeatherMapService from './openWeatherMap';
 
 class WeatherAdapter {
 
-    async getWeatherData(latitude: number, longitude: number) {
-        return await openWeatherMapService.getWeatherData(latitude, longitude);
+    async getCurrentWeatherData(latitude: number, longitude: number) {
+        return await openWeatherMapService.getCurrentWeatherData(latitude, longitude);
     }
 }
 

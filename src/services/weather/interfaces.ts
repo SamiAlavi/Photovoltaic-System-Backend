@@ -1,6 +1,7 @@
 enum ResponseFormat {
     JSON = "json",
     XML = "xml",
+    HTML = "html",
 }
 
 enum MeasurementUnit {
@@ -13,17 +14,17 @@ interface IWeather {
     API_KEY: string;
     baseUrl: string;
 
-    getWeatherData(latitude: number, longitude: number): Promise<any>;
+    getCurrentWeatherData(latitude: number, longitude: number): Promise<any>;
 }
 
-interface IWeatherRequest {
+interface IOpenWeatherMapRequest {
     lat: number,
     lon: number,
     appid: string,
-    cnt?: number, // [1, 30],
+    cnt: number, // [1, 16]
     mode?: ResponseFormat, // default json
     units?: MeasurementUnit, // default standard
     lang?: string, // language code
 }
 
-export { IWeather, IWeatherRequest };
+export { IWeather, IOpenWeatherMapRequest };
