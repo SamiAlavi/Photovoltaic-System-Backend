@@ -4,10 +4,16 @@ enum ResponseFormat {
     HTML = "html",
 }
 
-enum MeasurementUnit {
+enum MeasurementUnitOpenWeatherMap {
     STANDARD = "standard",
     METRIC = "metric",
     IMPERIAL = "imperial",
+}
+
+enum MeasurementUnitWeatherbit {
+    METRIC = "M", // Metric (Celsius, m/s, mm)
+    SCIENTIFIC = "S", // Scientific (Kelvin, m/s, mm)
+    Farenheit = "I", // Fahrenheit (F, mph, in)
 }
 
 interface IWeather {
@@ -17,14 +23,23 @@ interface IWeather {
     getCurrentWeatherData(latitude: number, longitude: number): Promise<any>;
 }
 
-interface IOpenWeatherMapRequest {
+interface IWeatherRequest {
     lat: number,
     lon: number,
+    lang?: string, // language code, default en
+}
+
+interface IOpenWeatherMapRequest extends IWeatherRequest {
     appid: string,
     cnt: number, // [1, 16]
     mode?: ResponseFormat, // default json
-    units?: MeasurementUnit, // default standard
-    lang?: string, // language code
+    units?: MeasurementUnitOpenWeatherMap, // default standard
 }
 
-export { IWeather, IOpenWeatherMapRequest };
+interface IWeatherbitRequest extends IWeatherRequest {
+    key: string,
+    cnt: number, // [1, 16], default 16
+    units?: MeasurementUnitWeatherbit, // default metric
+}
+
+export { IWeather, IOpenWeatherMapRequest, IWeatherbitRequest };
