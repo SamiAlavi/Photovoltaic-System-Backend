@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import environment from './env';
 
 // Routers
-import swaggerRoute from './routers/swaggerRoute';
+import swaggerRoute from './src/routers/swaggerRoute';
 
 const app: Express = express();
 const port = environment.PORT;
