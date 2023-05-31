@@ -1,3 +1,3 @@
-import cloudFirestoreService from "./firebase/cloudfirestore";
+import cloudFirestoreService from "./firebase/cloudFirestore";
 
 export { cloudFirestoreService };

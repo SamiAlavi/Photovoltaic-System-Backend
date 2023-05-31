@@ -1,7 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 import environment from './env';
 import './src/cronjob';
-import { cloudFirestoreService } from './src/services/services';
 
 // Routers
 import swaggerRoute from './src/routers/swaggerRoute';
