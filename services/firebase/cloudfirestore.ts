@@ -12,9 +12,8 @@ async function getDocuments(collectionName: string) {
         console.log(documents)
         return documents;
     }
-    catch (error) {
-        console.error(`Error getting documents: ${error}`);
-        throw error;
+    catch (error: any) {
+        catchError(error, 'Error getting documents');
     }
 }
 
@@ -29,10 +28,51 @@ async function getFilteredDocuments(collectionName: string, ...conditions: Where
         console.log(filteredDocuments)
         return filteredDocuments;
     }
-    catch (error) {
-        console.error(`Error getting filtered documents: ${error}`);
-        throw error;
+    catch (error: any) {
+        catchError(error, 'Error getting filtered documents');
     }
 }
 
-export { getDocuments, getFilteredDocuments };
+async function createDocument(collectionName: string, data: {}) {
+    try {
+        const collectionRef = database.collection(collectionName);
+        const docRef = await collectionRef.add(data);
+        console.log('Document created with ID:', docRef.id);
+    }
+    catch (error: any) {
+        catchError(error, 'Error creating document');
+    }
+}
+
+async function updateDocument(collectionName: string, documentId: string, data: {}) {
+    try {
+        const collectionRef = database.collection(collectionName);
+        const docRef = collectionRef.doc(documentId);
+        await docRef.update(data);
+        console.log('Document updated successfully!');
+    }
+    catch (error: any) {
+        catchError(error, 'Error updating document');
+    }
+}
+
+async function deleteDocument(collectionName: string, documentId: string) {
+    try {
+        const collectionRef = database.collection(collectionName);
+        const docRef = collectionRef.doc(documentId);
+        await docRef.delete();
+        console.log('Document updated successfully!');
+    }
+    catch (error: any) {
+        catchError(error, 'Error deleting document');
+    }
+}
+
+function catchError(error: Error, message: string) {
+    console.error(`${message}: ${error}`);
+    throw error;
+}
+
+
+
+export { getDocuments, getFilteredDocuments, createDocument, updateDocument, deleteDocument };
