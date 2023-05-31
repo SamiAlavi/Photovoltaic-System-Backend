@@ -1,9 +1,9 @@
 import swaggerUi from 'swagger-ui-express';
-import swaggerOptions from './swaggerconfig';
+import swaggerConfig from './swaggerconfig.json';
 import { Router } from 'express';
 
 const router = Router();
 
-router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOptions));
+router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerConfig));
 
 export default router;
