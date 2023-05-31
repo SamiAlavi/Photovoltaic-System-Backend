@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 import environment from './env';
+import './src/cronjob';
 
 // Routers
 import swaggerRoute from './src/routers/swaggerRoute';
