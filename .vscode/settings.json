@@ -2,6 +2,7 @@
     // TypeScript configuration
     "typescript.tsdk": "node_modules/typescript/lib",
     "typescript.suggest.completeFunctionCalls": true,
+    "typescript.format.semicolons": "insert",
     // Editor configuration
     "editor.insertSpaces": true,
     "editor.trimAutoWhitespace": true,
