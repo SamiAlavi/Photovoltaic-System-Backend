@@ -1,6 +1,6 @@
 {
     "main": "index.js",
-    "name": "Photovoltaic-System-Backend",
+    "name": "photovoltaic-system-backend",
     "scripts": {
         "start": "nodemon index.ts",
         "build": "npx tsc"
