@@ -2,6 +2,7 @@ enum ResponseFormat {
     JSON = "json",
     XML = "xml",
     HTML = "html",
+    CSV = "csv",
 }
 
 enum MeasurementUnitOpenWeatherMap {
@@ -16,6 +17,13 @@ enum MeasurementUnitWeatherbit {
     Farenheit = "I", // Fahrenheit (F, mph, in)
 }
 
+enum MeasurementUnitVisualCrossing {
+    US = "us", // F, mph, in
+    METRIC = "metric", // Celsius, km/hr, mm
+    UK = "uk", // Celsius, miles/hr, mm
+    BASE = "base", // Kelvin, m/s, mm
+}
+
 interface IWeather {
     API_KEY: string;
     baseUrl: string;
@@ -24,12 +32,12 @@ interface IWeather {
 }
 
 interface IWeatherRequest {
-    lat: number,
-    lon: number,
     lang?: string, // language code, default en
 }
 
 interface IOpenWeatherMapRequest extends IWeatherRequest {
+    lat: number,
+    lon: number,
     appid: string,
     cnt: number, // [1, 16]
     mode?: ResponseFormat, // default json
@@ -37,9 +45,23 @@ interface IOpenWeatherMapRequest extends IWeatherRequest {
 }
 
 interface IWeatherbitRequest extends IWeatherRequest {
+    lat: number,
+    lon: number,
     key: string,
     cnt: number, // [1, 16], default 16
     units?: MeasurementUnitWeatherbit, // default metric
 }
 
-export { IWeather, IOpenWeatherMapRequest, IWeatherbitRequest };
+interface IVisualCrossingRequest extends IWeatherRequest {
+    key: string,
+    unitGroup: MeasurementUnitVisualCrossing,
+    contentType: ResponseFormat.CSV | ResponseFormat.JSON, // default csv
+    dayStartTime: "0:0:00",
+    dayEndTime: "0:0:00",
+    aggregateHours: 24,
+    period: "last30days",
+    location: string,
+    extendedStats: boolean,
+}
+
+export { IWeather, IOpenWeatherMapRequest, IWeatherbitRequest, IVisualCrossingRequest, MeasurementUnitVisualCrossing, ResponseFormat };

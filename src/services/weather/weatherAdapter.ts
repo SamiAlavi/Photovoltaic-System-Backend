@@ -1,9 +1,14 @@
 import openWeatherMapService from './openWeatherMap';
+import visualCrossingService from './visualCrossing';
 
 class WeatherAdapter {
 
     async getCurrentWeatherData(latitude: number, longitude: number) {
         return await openWeatherMapService.getCurrentWeatherData(latitude, longitude);
+    }
+
+    async getLast30DaysWeather(latitude: number, longitude: number) {
+        return await visualCrossingService.getLast30DaysWeather(latitude, longitude);
     }
 }
 
