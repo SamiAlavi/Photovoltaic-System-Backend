@@ -20,7 +20,7 @@ app.use(routeLoggerMiddleware);
 if (environment.ENVIRONMENT === 'development') {
     app.use(swaggerRoute);
 }
-app.use('/login', authenticationRoute);
+app.use('/auth', authenticationRoute);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server');
