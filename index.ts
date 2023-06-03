@@ -4,19 +4,19 @@ import environment from './env';
 import './src/cronjob';
 
 // Middlewares
-import routeLoggerMiddleware from './src/middlewares/routeLoggerMiddleware';
+import routeLogger from './src/middlewares/routeLogger';
 
 // Routers
 import swaggerRoute from './src/routers/swaggerRoute';
 import authenticationRoute from './src/routers/authentication';
-import errorHandlerMiddleware from './src/middlewares/errorHandlerMiddleware';
+import errorHandler from './src/middlewares/errorHandler';
 
 const app: Express = express();
 const port = environment.PORT;
 
 app.use(cors());
 app.use(express.json());
-app.use(routeLoggerMiddleware);
+app.use(routeLogger);
 
 if (environment.ENVIRONMENT === 'development') {
     app.use(swaggerRoute);
@@ -27,7 +27,7 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server');
 });
 
-app.use(errorHandlerMiddleware);
+app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
