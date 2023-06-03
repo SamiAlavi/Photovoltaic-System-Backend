@@ -1,6 +1,6 @@
 import axios from "axios";
 import enviroment from '../../../env';
-import Helpers from "../../helpers";
+import Helpers from "../../shared/helpers";
 import { IWeather, IVisualCrossingRequest } from './interfaces';
 import { MeasurementUnitVisualCrossing, ResponseFormat } from "./enums";
 

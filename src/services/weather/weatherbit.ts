@@ -1,6 +1,6 @@
 import axios from "axios";
 import environment from "../../../env";
-import Helpers from "../../helpers";
+import Helpers from "../../shared/helpers";
 import { IWeather, IWeatherbitRequest } from "./interfaces";
 
 class Weatherbit implements IWeather {
