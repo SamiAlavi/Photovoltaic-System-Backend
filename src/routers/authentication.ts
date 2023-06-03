@@ -12,9 +12,9 @@ router.post('/signup', async (req: Request, res: Response, next: NextFunction) =
         const mappedUserDetails = Mapper.mapUserRecord(user);
         res.send(mappedUserDetails);
     }
-    catch (error) {
+    catch (error: any) {
         // console.error('Error creating new user:', error);
-        next(error);
+        handleError(res, error);
     }
 });
 
@@ -25,10 +25,16 @@ router.post('/signin', async (req: Request, res: Response, next: NextFunction) =
         const mappedUserDetails = Mapper.mapUserRecord(user);
         res.send(mappedUserDetails);
     }
-    catch (error) {
+    catch (error: any) {
         // console.error('Error logging in:', error);
-        next(error);
+        handleError(res, error);
     }
 });
+
+function handleError(res: Response, error: Error) {
+    res.status(400).send({
+        message: error.message,
+    });
+}
 
 export default router;
