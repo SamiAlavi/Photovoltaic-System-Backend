@@ -1,16 +1,12 @@
-import admin from "firebase-admin";
-import { app } from './firebase';
-import { UserRecord } from "firebase-admin/lib/auth/user-record";
+import { firebaseApp } from './firebase';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, User } from "firebase/auth";
 
 class FirebaseAuth {
-    private auth = admin.auth(app);
+    private auth = getAuth(firebaseApp);
 
-    async createEmailPasswordBasedAccount(email: string, password: string): Promise<UserRecord> {
+    async createEmailPasswordBasedAccount(email: string, password: string): Promise<User> {
         try {
-            const userRecord = await this.auth.createUser({
-                email: email,
-                password: password
-            });
+            const userRecord = (await createUserWithEmailAndPassword(this.auth, email, password)).user;
             console.log('Successfully created new user:', userRecord.uid);
             return userRecord;
         }
@@ -20,14 +16,10 @@ class FirebaseAuth {
         }
     }
 
-    async loginEmailPasswordBasedAccount(email: string, password: string): Promise<UserRecord> {
+    async loginEmailPasswordBasedAccount(email: string, password: string): Promise<User> {
         try {
-            const userRecord = await this.auth.getUserByEmail(email);
-            const user = {
-                uid: userRecord.uid,
-                email: userRecord.email
-            };
-            console.log('Successfully logged in:', user);
+            const userRecord = (await signInWithEmailAndPassword(this.auth, email, password)).user;
+            console.log('Successfully logged in:', userRecord);
             return userRecord;
         }
         catch (error) {
