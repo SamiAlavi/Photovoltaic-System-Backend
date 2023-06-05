@@ -1,4 +1,5 @@
 import { User } from "firebase/auth";
+import { Request } from 'express';
 
 interface UserImp extends User {
     accessToken?: string,
@@ -7,10 +8,16 @@ interface UserImp extends User {
 interface CustomUserRecord {
     uid: string,
     email: string,
-    accessToken: string,
+    accessToken?: string,
 }
+
+interface CustomRequest extends Request {
+    auth?: any;
+}
+
 
 export {
     UserImp,
     CustomUserRecord,
+    CustomRequest,
 };

@@ -3,7 +3,31 @@ import { firebaseAdminApp } from './firebase';
 import { CollectionReferenceOrQuery, CollectionReferenceDocumentData, QueryDocumentData, WhereCondition, DocumentReference } from './types';
 
 class CloudFirestore {
-    private database = admin.firestore(firebaseAdminApp);
+    database = admin.firestore(firebaseAdminApp);
+
+    getDocument(collectionName: string, documentId: string): any;
+    getDocument(collectionRef: CollectionReferenceDocumentData, documentId: string): any;
+
+    async getDocument(collection: string | CollectionReferenceDocumentData, documentId: string) {
+        try {
+            const docRef = this.getCollection(collection).doc(documentId);
+            const documentSnapshot = await docRef.get();
+
+            if (documentSnapshot.exists) {
+                const documentData = documentSnapshot.data();
+                console.log('Document data:', documentData);
+                return documentData;
+            }
+            else {
+                const documentData = documentSnapshot.data();
+                console.log('Document data:', documentData);
+                return documentData;
+            }
+        }
+        catch (error: any) {
+            this.handleError(error, 'Error getting document');
+        }
+    }
 
     getDocuments(collectionName: string): any;
     getDocuments(collectionRef: CollectionReferenceOrQuery): any;
@@ -43,6 +67,7 @@ class CloudFirestore {
                 docRef = await collectionRef.add(data);
             }
             console.log('Document created with ID:', docRef.id);
+            return docRef.id;
         }
         catch (error: any) {
             this.handleError(error, 'Error creating document');

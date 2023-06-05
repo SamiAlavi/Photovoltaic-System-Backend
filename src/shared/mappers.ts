@@ -5,7 +5,6 @@ export class Mapper {
         const destination: CustomUserRecord = {
             uid: source.uid,
             email: source.email ?? "",
-            accessToken: source.accessToken ?? "",
         };
         return destination;
     }
