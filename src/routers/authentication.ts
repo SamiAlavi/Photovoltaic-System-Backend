@@ -23,12 +23,23 @@ router.post('/signin', async (req: Request, res: Response, next: NextFunction) =
         const { email, password } = req.body;
         const user = await firebaseAuth.loginEmailPasswordBasedAccount(email, password);
         const mappedUserDetails = Mapper.mapUserRecord(user);
+        (req.session as any).user = user;
         res.send(mappedUserDetails);
     }
     catch (error: any) {
         // console.error('Error logging in:', error);
         handleError(res, error);
     }
+});
+
+
+router.get('/signout', async (req: Request, res: Response) => {
+    req.session.destroy((error) => {
+        if (error) {
+            console.error('Session Destroy Error:', error);
+        }
+        res.redirect('/');
+    });
 });
 
 function handleError(res: Response, error: Error) {

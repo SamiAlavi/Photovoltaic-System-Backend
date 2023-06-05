@@ -1,9 +1,9 @@
 import admin from 'firebase-admin';
-import { app } from './firebase';
+import { firebaseAdminApp } from './firebase';
 import { CollectionReferenceOrQuery, CollectionReferenceDocumentData, QueryDocumentData, WhereCondition, DocumentReference } from './types';
 
 class CloudFirestore {
-    private database = admin.firestore(app);
+    private database = admin.firestore(firebaseAdminApp);
 
     getDocuments(collectionName: string): any;
     getDocuments(collectionRef: CollectionReferenceOrQuery): any;

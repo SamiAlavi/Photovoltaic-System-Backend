@@ -13,7 +13,7 @@ class FirebaseAuth {
 
     async loginEmailPasswordBasedAccount(email: string, password: string): Promise<User> {
         const userRecord = (await signInWithEmailAndPassword(this.auth, email, password)).user;
-        console.log('Successfully logged in:', userRecord);
+        console.log('Successfully logged in:', userRecord.uid);
         return userRecord;
     }
 }
