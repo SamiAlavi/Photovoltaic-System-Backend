@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import environment from "../../env";
-import sessionManager from "../services/firebase/sessionManager";
+import sessionManager from "../services/sessionManager";
 import { CustomUserRecord } from "../shared/interfaces";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
 

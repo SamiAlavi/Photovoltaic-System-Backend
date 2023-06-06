@@ -1,5 +1,5 @@
-import cloudFirestoreService from './cloudFirestore';
-import { CustomUserRecord } from '../../shared/interfaces';
+import cloudFirestoreService from './firebase/cloudFirestore';
+import { CustomUserRecord } from '../shared/interfaces';
 
 class SessionManager {
     private sessionsCollection = cloudFirestoreService.database.collection("sessions");

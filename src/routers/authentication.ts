@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import firebaseAuth from '../services/firebase/firebaseAuth';
 import { Mapper } from '../shared/mappers';
 import environment from '../../env';
-import sessionManagerService from '../services/firebase/sessionManager';
+import sessionManagerService from '../services/sessionManager';
 const jwt = require('jsonwebtoken');
 
 const router = Router();
