@@ -6,10 +6,12 @@ import jwt, { TokenExpiredError } from "jsonwebtoken";
 import AppSettings from "../../AppSettings";
 
 const secret = environment.SESSION_SECRET;
+const skipPaths = [AppSettings.RouteSignin, AppSettings.RouteSignup]
+    .map((route) => `${AppSettings.RouteApi}${route}`);
 
 // Firebase Authentication middleware
 const authenticate = async (req: CustomRequest, res: Response, next: NextFunction) => {
-    if (req.path.endsWith(AppSettings.RouteSignin)) {
+    if (skipPaths.includes(req.path)) {
         next();
         return;
     }

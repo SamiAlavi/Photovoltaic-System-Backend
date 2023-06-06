@@ -24,6 +24,7 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 app.use(routeLogger);
+app.use(authentication);
 
 if (!isProduction) {
     app.use(swaggerRoute);
@@ -34,7 +35,6 @@ app.get(AppSettings.RouteBase, (req: Request, res: Response) => {
 });
 
 app.use(AppSettings.RouteApi, authenticationRoute);
-app.use(authentication);
 
 app.use(AppSettings.RouteProject, projectRoute);
 

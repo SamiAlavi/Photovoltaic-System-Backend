@@ -5,6 +5,7 @@ import environment from '../../env';
 import sessionManagerService from '../services/sessionManager';
 import projectService from "../services/projectService";
 import AppSettings from '../../AppSettings';
+import { CustomRequest } from '../shared/interfaces';
 const jwt = require('jsonwebtoken');
 
 const router = Router();
@@ -42,8 +43,9 @@ router.post(AppSettings.RouteSignin, async (req: Request, res: Response, next: N
 });
 
 
-router.get(AppSettings.RouteSignout, async (req: Request, res: Response) => {
-    res.redirect('/');
+router.get(AppSettings.RouteSignout, async (req: CustomRequest, res: Response) => {
+    sessionManagerService.deleteSession(req.userUid);
+    res.send({});
 });
 
 function handleError(res: Response, error: Error) {
