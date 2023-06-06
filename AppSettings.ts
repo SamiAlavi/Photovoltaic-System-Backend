@@ -1,10 +1,10 @@
 class AppSettings {
     static RouteBase = "/";
-    static RouteAuth = "/api";
+    static RouteApi = "/api";
     static RouteSignup = "/signup";
     static RouteSignin = "/signin";
     static RouteSignout = "/signout";
-    static RouteProject = "/project";
+    static RouteProject = `${this.RouteApi}/project`;
 }
 
 export default AppSettings;

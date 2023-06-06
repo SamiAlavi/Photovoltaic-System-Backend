@@ -21,7 +21,6 @@ const port = environment.PORT;
 const isProduction = environment.ENVIRONMENT === "production";
 
 app.use(cors());
-app.options('*', cors());
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 app.use(routeLogger);
@@ -34,7 +33,7 @@ app.get(AppSettings.RouteBase, (req: Request, res: Response) => {
     res.send('Express + TypeScript Server');
 });
 
-app.use(AppSettings.RouteAuth, authenticationRoute);
+app.use(AppSettings.RouteApi, authenticationRoute);
 app.use(authentication);
 
 app.use(AppSettings.RouteProject, projectRoute);

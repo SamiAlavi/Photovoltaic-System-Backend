@@ -5,23 +5,20 @@ import { CollectionReferenceOrQuery, CollectionReferenceDocumentData, QueryDocum
 class CloudFirestore {
     database = admin.firestore(firebaseAdminApp);
 
-    getDocument(collectionName: string, documentId: string): any;
-    getDocument(collectionRef: CollectionReferenceDocumentData, documentId: string): any;
+    getDocument(collectionName: string, documentId: string): Promise<any>;
+    getDocument(collectionRef: CollectionReferenceDocumentData, documentId: string): Promise<any>;
 
-    async getDocument(collection: string | CollectionReferenceDocumentData, documentId: string) {
+    async getDocument(collection: string | CollectionReferenceDocumentData, documentId: string): Promise<any> {
         try {
             const docRef = this.getCollection(collection).doc(documentId);
             const documentSnapshot = await docRef.get();
 
             if (documentSnapshot.exists) {
                 const documentData = documentSnapshot.data();
-                console.log('Document data:', documentData);
                 return documentData;
             }
             else {
-                const documentData = documentSnapshot.data();
-                console.log('Document data:', documentData);
-                return documentData;
+                throw Error();
             }
         }
         catch (error: any) {
@@ -29,12 +26,12 @@ class CloudFirestore {
         }
     }
 
-    getDocuments(collectionName: string): any;
-    getDocuments(collectionRef: CollectionReferenceOrQuery): any;
-    getDocuments(collectionName: string, ...conditions: WhereCondition[]): any;
-    getDocuments(collectionRef: CollectionReferenceOrQuery, ...conditions: WhereCondition[]): any;
+    getDocuments(collectionName: string): Promise<any[]>;
+    getDocuments(collectionRef: CollectionReferenceOrQuery): Promise<any[]>;
+    getDocuments(collectionName: string, ...conditions: WhereCondition[]): Promise<any[]>;
+    getDocuments(collectionRef: CollectionReferenceOrQuery, ...conditions: WhereCondition[]): Promise<any[]>;
 
-    async getDocuments(collection: string | CollectionReferenceOrQuery, ...conditions: WhereCondition[]) {
+    async getDocuments(collection: string | CollectionReferenceOrQuery, ...conditions: WhereCondition[]): Promise<any[]> {
         try {
             let collectionRef = this.getCollection(collection);
             if (conditions.length) {
@@ -43,8 +40,12 @@ class CloudFirestore {
                 });
             }
             const collectionSnapshot = await collectionRef.get();
-            const documents = collectionSnapshot.docs.map(document => ({ id: document.id, ...document.data() }));
-            console.log(documents);
+            const documents = [];
+            collectionSnapshot.docs.forEach(document => {
+                if (!document.id.startsWith("_")) {
+                    documents.push({ id: document.id, ...document.data() });
+                }
+            });
             return documents;
         }
         catch (error: any) {
@@ -52,10 +53,10 @@ class CloudFirestore {
         }
     }
 
-    createDocument(collectionName: string, data: {}, documentId?: string): any;
-    createDocument(collectionRef: CollectionReferenceDocumentData, data: {}, documentId?: string): any;
+    createDocument(collectionName: string, data: {}, documentId?: string): Promise<any>;
+    createDocument(collectionRef: CollectionReferenceDocumentData, data: {}, documentId?: string): Promise<any>;
 
-    async createDocument(collection: string | CollectionReferenceDocumentData, data: {}, documentId?: string) {
+    async createDocument(collection: string | CollectionReferenceDocumentData, data: {}, documentId?: string): Promise<any> {
         try {
             let docRef: DocumentReference;
             const collectionRef = this.getCollection(collection);
@@ -74,10 +75,10 @@ class CloudFirestore {
         }
     }
 
-    updateDocument(collectionName: string, data: {}, documentId: string): any;
-    updateDocument(collectionName: CollectionReferenceDocumentData, data: {}, documentId: string): any;
+    updateDocument(collectionName: string, data: {}, documentId: string): Promise<any>;
+    updateDocument(collectionName: CollectionReferenceDocumentData, data: {}, documentId: string): Promise<any>;
 
-    async updateDocument(collection: string | CollectionReferenceDocumentData, data: {}, documentId: string) {
+    async updateDocument(collection: string | CollectionReferenceDocumentData, data: {}, documentId: string): Promise<any> {
         try {
             const collectionRef = this.getCollection(collection);
             const docRef = collectionRef.doc(documentId);
@@ -89,10 +90,10 @@ class CloudFirestore {
         }
     }
 
-    deleteDocument(collectionName: string, documentId: string): any;
-    deleteDocument(collectionName: CollectionReferenceDocumentData, documentId: string): any;
+    deleteDocument(collectionName: string, documentId: string): Promise<void>;
+    deleteDocument(collectionName: CollectionReferenceDocumentData, documentId: string): Promise<void>;
 
-    async deleteDocument(collection: string | CollectionReferenceDocumentData, documentId: string) {
+    async deleteDocument(collection: string | CollectionReferenceDocumentData, documentId: string): Promise<void> {
         try {
             const collectionRef = this.getCollection(collection);
             const docRef = collectionRef.doc(documentId);

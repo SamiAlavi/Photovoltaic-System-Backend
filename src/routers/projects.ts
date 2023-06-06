@@ -7,7 +7,7 @@ const router = Router();
 
 router.get(AppSettings.RouteBase, async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
-        const projects = projectService.getProjects(req.userUid);
+        const projects = await projectService.getProjects(req.userUid);
         res.send(projects);
     }
     catch (error: any) {
