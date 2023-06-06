@@ -43,9 +43,9 @@ router.post(AppSettings.RouteSignin, async (req: Request, res: Response, next: N
 });
 
 
-router.get(AppSettings.RouteSignout, async (req: CustomRequest, res: Response) => {
+router.delete(AppSettings.RouteSignout, async (req: CustomRequest, res: Response) => {
     sessionManagerService.deleteSession(req.userUid);
-    res.send({});
+    res.sendStatus(204);
 });
 
 function handleError(res: Response, error: Error) {
