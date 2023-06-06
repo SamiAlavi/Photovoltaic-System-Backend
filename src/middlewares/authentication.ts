@@ -1,14 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import environment from "../../env";
 import sessionManager from "../services/sessionManager";
-import { CustomUserRecord } from "../shared/interfaces";
+import { CustomRequest, CustomUserRecord } from "../shared/interfaces";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
+import AppSettings from "../../AppSettings";
 
 const secret = environment.SESSION_SECRET;
 
 // Firebase Authentication middleware
-const authenticate = async (req: Request, res: Response, next: NextFunction) => {
-    if (req.path === '/signin') {
+const authenticate = async (req: CustomRequest, res: Response, next: NextFunction) => {
+    if (req.path.endsWith(AppSettings.RouteSignin)) {
         next();
         return;
     }
@@ -29,6 +30,7 @@ const authenticate = async (req: Request, res: Response, next: NextFunction) => 
         if (!(isSameUser && isSameToken)) {
             return res.status(403).json({ message: 'Token is not for the same user' });
         }
+        req.userUid = userUid;
         next();
     } catch (error: any) {
         let message = 'Invalid token';

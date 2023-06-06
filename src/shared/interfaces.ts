@@ -13,7 +13,12 @@ interface CustomUserRecord {
 }
 
 interface CustomRequest extends Request {
-    auth?: any;
+    userUid: string,
+}
+
+interface Project {
+    id: string,
+    [key: string]: any,
 }
 
 
@@ -21,4 +26,5 @@ export {
     UserImp,
     CustomUserRecord,
     CustomRequest,
+    Project,
 };

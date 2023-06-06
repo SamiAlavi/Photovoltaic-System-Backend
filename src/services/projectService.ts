@@ -1,7 +1,8 @@
+import { Project } from '../shared/interfaces';
 import cloudFirestoreService from './firebase/cloudFirestore';
 import { CollectionReferenceDocumentData } from './firebase/types';
 
-class SessionManager {
+class ProjectService {
     private projectsKey = "projects";
     private projectsDocument = cloudFirestoreService.database.collection(this.projectsKey).doc(this.projectsKey);
 
@@ -9,7 +10,7 @@ class SessionManager {
         return this.projectsDocument.collection(userUid);
     }
 
-    async getProjects(userUid: string): Promise<any> {
+    async getProjects(userUid: string): Promise<Project[]> {
         return await cloudFirestoreService.getDocuments(this.getUserProjectsCollection(userUid));
     }
 
@@ -17,7 +18,12 @@ class SessionManager {
         return await cloudFirestoreService.getDocument(this.getUserProjectsCollection(userUid), projectId);
     }
 
-    async saveProject(userUid: string, project: any): Promise<string> {
+    async initProject(userUid: string) {
+        const tempProject: Project = { id: "_temp" };
+        return await this.saveProject(userUid, tempProject);
+    }
+
+    async saveProject(userUid: string, project: Project): Promise<string> {
         const docId = await cloudFirestoreService.createDocument(this.getUserProjectsCollection(userUid), project, project.id);
         return docId;
     }
@@ -27,4 +33,4 @@ class SessionManager {
     }
 }
 
-export default new SessionManager();
+export default new ProjectService();

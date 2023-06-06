@@ -3,16 +3,18 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import environment from './env';
 import './src/cronjob';
+import { CustomRequest } from './src/shared/interfaces';
+import AppSettings from './AppSettings';
 
 // Middlewares
 import routeLogger from './src/middlewares/routeLogger';
 import authentication from './src/middlewares/authentication';
+import errorHandler from './src/middlewares/errorHandler';
 
 // Routers
 import swaggerRoute from './src/routers/swaggerRoute';
 import authenticationRoute from './src/routers/authentication';
-import errorHandler from './src/middlewares/errorHandler';
-import { CustomRequest } from './src/shared/interfaces';
+import projectRoute from './src/routers/projects';
 
 const app = express();
 const port = environment.PORT;
@@ -24,18 +26,21 @@ app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 app.use(routeLogger);
 
-if (environment.ENVIRONMENT === 'development') {
+if (!isProduction) {
     app.use(swaggerRoute);
 }
 
-app.get('/', (req: Request, res: Response) => {
+app.get(AppSettings.RouteBase, (req: Request, res: Response) => {
     res.send('Express + TypeScript Server');
 });
-app.use('/', authenticationRoute);
+
+app.use(AppSettings.RouteAuth, authenticationRoute);
 app.use(authentication);
 
+app.use(AppSettings.RouteProject, projectRoute);
+
 app.get('/test', (req: CustomRequest, res: Response) => {
-    res.send(req.auth);
+    res.send("Test");
 });
 
 app.use(errorHandler);

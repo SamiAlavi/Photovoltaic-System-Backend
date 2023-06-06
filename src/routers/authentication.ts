@@ -3,16 +3,19 @@ import firebaseAuth from '../services/firebase/firebaseAuth';
 import { Mapper } from '../shared/mappers';
 import environment from '../../env';
 import sessionManagerService from '../services/sessionManager';
+import projectService from "../services/projectService";
+import AppSettings from '../../AppSettings';
 const jwt = require('jsonwebtoken');
 
 const router = Router();
 const secret = environment.SESSION_SECRET;
 const expiry = { expiresIn: `${environment.SESSION_TIMEOUT}ms` };
 
-router.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
+router.post(AppSettings.RouteSignup, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password } = req.body;
         const user = await firebaseAuth.createEmailPasswordBasedAccount(email, password);
+        projectService.initProject(user.uid);
         const mappedUserDetails = Mapper.mapUserRecord(user);
         res.send(mappedUserDetails);
     }
@@ -22,7 +25,7 @@ router.post('/signup', async (req: Request, res: Response, next: NextFunction) =
     }
 });
 
-router.post('/signin', async (req: Request, res: Response, next: NextFunction) => {
+router.post(AppSettings.RouteSignin, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password } = req.body;
         const user = await firebaseAuth.loginEmailPasswordBasedAccount(email, password);
@@ -39,7 +42,7 @@ router.post('/signin', async (req: Request, res: Response, next: NextFunction) =
 });
 
 
-router.get('/signout', async (req: Request, res: Response) => {
+router.get(AppSettings.RouteSignout, async (req: Request, res: Response) => {
     res.redirect('/');
 });
 
