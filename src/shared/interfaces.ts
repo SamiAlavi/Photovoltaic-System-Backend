@@ -16,9 +16,14 @@ interface CustomRequest extends Request {
     userUid: string,
 }
 
+interface Product {
+    [key: string]: any,
+}
+
 interface Project {
     id: string,
-    [key: string]: any,
+    name: string,
+    products: Product[],
 }
 
 

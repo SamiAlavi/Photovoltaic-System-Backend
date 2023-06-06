@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response } from 'express';
 import firebaseAuth from '../services/firebase/firebaseAuth';
 import { Mapper } from '../shared/mappers';
 import environment from '../../env';
@@ -12,7 +12,7 @@ const router = Router();
 const secret = environment.SESSION_SECRET;
 const expiry = { expiresIn: `${environment.SESSION_TIMEOUT}ms` };
 
-router.post(AppSettings.RouteSignup, async (req: Request, res: Response, next: NextFunction) => {
+router.post(AppSettings.RouteSignup, async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
         const user = await firebaseAuth.createEmailPasswordBasedAccount(email, password);
@@ -26,14 +26,14 @@ router.post(AppSettings.RouteSignup, async (req: Request, res: Response, next: N
     }
 });
 
-router.post(AppSettings.RouteSignin, async (req: Request, res: Response, next: NextFunction) => {
+router.post(AppSettings.RouteSignin, async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
         const user = await firebaseAuth.loginEmailPasswordBasedAccount(email, password);
         const userRecord = Mapper.mapUserRecord(user);
         const accessToken = jwt.sign(userRecord, secret, expiry);
         userRecord.accessToken = accessToken;
-        const docId = await sessionManagerService.setSession(userRecord);
+        sessionManagerService.setSession(userRecord);
         res.send(userRecord);
     }
     catch (error: any) {

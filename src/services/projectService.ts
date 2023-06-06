@@ -19,7 +19,7 @@ class ProjectService {
     }
 
     async initProject(userUid: string) {
-        const tempProject: Project = { id: "_temp" };
+        const tempProject: Project = { id: "_temp", name: "_temp", products: [] };
         return await this.saveProject(userUid, tempProject);
     }
 
