@@ -11,8 +11,11 @@ class SessionManager {
 
     async getSession(userUid: string) {
         const doc = await cloudFirestoreService.getDocument(this.sessionsCollection, userUid);
-        console.log(doc);
         return doc;
+    }
+
+    async deleteSession(userUid: string) {
+        await cloudFirestoreService.deleteDocument(this.sessionsCollection, userUid);
     }
 }
 

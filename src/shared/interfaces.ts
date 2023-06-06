@@ -9,6 +9,7 @@ interface CustomUserRecord {
     uid: string,
     email: string,
     accessToken?: string,
+    exp?: number,
 }
 
 interface CustomRequest extends Request {

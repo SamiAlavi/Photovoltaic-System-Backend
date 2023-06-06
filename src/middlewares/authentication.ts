@@ -1,12 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import admin from 'firebase-admin';
-import { firebaseAdminApp } from '../services/firebase/firebase';
 import environment from "../../env";
 import sessionManager from "../services/firebase/sessionManager";
 import { CustomUserRecord } from "../shared/interfaces";
-const jwt = require('jsonwebtoken');
+import jwt, { TokenExpiredError } from "jsonwebtoken";
 
-const auth = admin.auth(firebaseAdminApp);
 const secret = environment.SESSION_SECRET;
 
 // Firebase Authentication middleware
@@ -25,14 +22,22 @@ const authenticate = async (req: Request, res: Response, next: NextFunction) => 
 
     try {
         // Verify the token using your secret key or public key
-        const user: CustomUserRecord = jwt.verify(token, secret);
+        const decoded = jwt.verify(token, secret) as CustomUserRecord;
         const document: CustomUserRecord = await sessionManager.getSession(userUid);
-        if (token !== document.accessToken) {
+        const isSameUser = userUid === decoded.uid && userUid === document.uid;
+        const isSameToken = token === document.accessToken;
+        if (!(isSameUser && isSameToken)) {
             return res.status(403).json({ message: 'Token is not for the same user' });
         }
         next();
-    } catch (error) {
-        return res.status(401).json({ message: 'Invalid token' });
+    } catch (error: any) {
+        let message = 'Invalid token';
+        if (error instanceof TokenExpiredError) {
+            const { uid } = jwt.decode(token) as CustomUserRecord;
+            sessionManager.deleteSession(uid);
+            message = 'Session Expired. Please signin again.';
+        }
+        return res.status(401).json({ message: message });
     }
 };
 

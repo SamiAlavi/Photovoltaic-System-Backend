@@ -97,7 +97,7 @@ class CloudFirestore {
             const collectionRef = this.getCollection(collection);
             const docRef = collectionRef.doc(documentId);
             await docRef.delete();
-            console.log('Document updated successfully!');
+            console.log('Document deleted successfully!');
         }
         catch (error: any) {
             this.handleError(error, 'Error deleting document');
