@@ -10,8 +10,12 @@ class ProjectService {
         return this.projectsDocument.collection(userUid);
     }
 
-    async getProjects(userUid: string): Promise<string[]> {
+    async getProjectsIds(userUid: string): Promise<string[]> {
         return await cloudFirestoreService.getDocumentsIds(this.getUserProjectsCollection(userUid));
+    }
+
+    async getProjects(userUid: string): Promise<IProject[]> {
+        return await cloudFirestoreService.getDocuments(this.getUserProjectsCollection(userUid));
     }
 
     async getProject(userUid: string, projectId: string): Promise<IProject> {
