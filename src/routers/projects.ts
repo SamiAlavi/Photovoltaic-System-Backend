@@ -28,6 +28,18 @@ router.get(AppSettings.RouteId, async (req: ICustomRequest, res: Response, next:
     }
 });
 
+router.post(AppSettings.RouteBase, async (req: ICustomRequest, res: Response, next: NextFunction) => {
+    try {
+        const projectId: string = req.body.id;
+        const project = projectService.createProject(req.userUid, projectId);
+        res.status(201).send(project);
+    }
+    catch (error: any) {
+        // console.error('Error creating new user:', error);
+        handleError(res, error);
+    }
+});
+
 function handleError(res: Response, error: Error) {
     res.status(400).send({
         message: error.message,

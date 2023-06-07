@@ -19,7 +19,7 @@ class ProjectService {
     }
 
     async initProject(userUid: string) {
-        const tempProject: IProject = { id: "_temp", name: "_temp", products: [] };
+        const tempProject: IProject = { id: "_temp", products: [], timeCreated: Date.now() };
         return await this.saveProject(userUid, tempProject);
     }
 
@@ -27,6 +27,13 @@ class ProjectService {
         const docId = await cloudFirestoreService.createDocument(this.getUserProjectsCollection(userUid), project, project.id);
         return docId;
     }
+
+    createProject(userUid: string, projectId: string): IProject {
+        const project: IProject = { id: projectId, products: [], timeCreated: Date.now() };
+        this.saveProject(userUid, project);
+        return project;
+    }
+
 
     async deleteProject(userUid: string, projectId: string) {
         await cloudFirestoreService.deleteDocument(this.getUserProjectsCollection(userUid), projectId);
