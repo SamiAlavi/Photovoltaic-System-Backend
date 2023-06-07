@@ -1,11 +1,11 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import projectService from "../services/projectService";
 import AppSettings from '../../AppSettings';
-import { CustomRequest } from '../shared/interfaces';
+import { ICustomRequest } from '../shared/interfaces';
 
 const router = Router();
 
-router.get(AppSettings.RouteBase, async (req: CustomRequest, res: Response, next: NextFunction) => {
+router.get(AppSettings.RouteBase, async (req: ICustomRequest, res: Response, next: NextFunction) => {
     try {
         const projects = await projectService.getProjects(req.userUid);
         res.send(projects);

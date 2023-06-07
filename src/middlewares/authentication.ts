@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import environment from "../../env";
 import sessionManager from "../services/sessionManager";
-import { CustomRequest, CustomUserRecord } from "../shared/interfaces";
+import { ICustomRequest, ICustomUserRecord } from "../shared/interfaces";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
 import AppSettings from "../../AppSettings";
 
@@ -10,7 +10,7 @@ const skipPaths = [AppSettings.RouteSignin, AppSettings.RouteSignup]
     .map((route) => `${AppSettings.RouteApi}${route}`);
 
 // Firebase Authentication middleware
-const authenticate = async (req: CustomRequest, res: Response, next: NextFunction) => {
+const authenticate = async (req: ICustomRequest, res: Response, next: NextFunction) => {
     if (skipPaths.includes(req.path)) {
         next();
         return;
@@ -25,8 +25,8 @@ const authenticate = async (req: CustomRequest, res: Response, next: NextFunctio
 
     try {
         // Verify the token using your secret key or public key
-        const decoded = jwt.verify(token, secret) as CustomUserRecord;
-        const document: CustomUserRecord = await sessionManager.getSession(userUid);
+        const decoded = jwt.verify(token, secret) as ICustomUserRecord;
+        const document: ICustomUserRecord = await sessionManager.getSession(userUid);
         const isSameUser = userUid === decoded.uid && userUid === document.uid;
         const isSameToken = token === document.accessToken;
         if (!(isSameUser && isSameToken)) {
@@ -37,7 +37,7 @@ const authenticate = async (req: CustomRequest, res: Response, next: NextFunctio
     } catch (error: any) {
         let message = 'Invalid token';
         if (error instanceof TokenExpiredError) {
-            const { uid } = jwt.decode(token) as CustomUserRecord;
+            const { uid } = jwt.decode(token) as ICustomUserRecord;
             sessionManager.deleteSession(uid);
             message = 'Session Expired. Please signin again.';
         }

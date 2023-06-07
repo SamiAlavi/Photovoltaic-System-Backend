@@ -1,35 +1,29 @@
-import { User } from "firebase/auth";
 import { Request } from 'express';
 
-interface UserImp extends User {
-    accessToken?: string,
-}
-
-interface CustomUserRecord {
+interface ICustomUserRecord {
     uid: string,
     email: string,
     accessToken?: string,
     exp?: number,
 }
 
-interface CustomRequest extends Request {
+interface ICustomRequest extends Request {
     userUid: string,
 }
 
-interface Product {
+interface IProduct {
     [key: string]: any,
 }
 
-interface Project {
+interface IProject {
     id: string,
     name: string,
-    products: Product[],
+    products: IProduct[],
 }
 
 
 export {
-    UserImp,
-    CustomUserRecord,
-    CustomRequest,
-    Project,
+    ICustomUserRecord,
+    ICustomRequest,
+    IProject,
 };

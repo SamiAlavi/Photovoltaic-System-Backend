@@ -3,7 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import environment from './env';
 import './src/cronjob';
-import { CustomRequest } from './src/shared/interfaces';
+import { ICustomRequest } from './src/shared/interfaces';
 import AppSettings from './AppSettings';
 
 // Middlewares
@@ -38,7 +38,7 @@ app.use(AppSettings.RouteApi, authenticationRoute);
 
 app.use(AppSettings.RouteProject, projectRoute);
 
-app.get('/test', (req: CustomRequest, res: Response) => {
+app.get('/test', (req: ICustomRequest, res: Response) => {
     res.send("Test");
 });
 

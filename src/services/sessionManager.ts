@@ -1,10 +1,10 @@
 import cloudFirestoreService from './firebase/cloudFirestore';
-import { CustomUserRecord } from '../shared/interfaces';
+import { ICustomUserRecord } from '../shared/interfaces';
 
 class SessionManager {
     private sessionsCollection = cloudFirestoreService.database.collection("sessions");
 
-    async setSession(user: CustomUserRecord): Promise<string> {
+    async setSession(user: ICustomUserRecord): Promise<string> {
         const docId = await cloudFirestoreService.createDocument(this.sessionsCollection, user, user.uid);
         return docId;
     }

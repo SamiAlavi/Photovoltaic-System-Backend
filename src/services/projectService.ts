@@ -1,4 +1,4 @@
-import { Project } from '../shared/interfaces';
+import { IProject } from '../shared/interfaces';
 import cloudFirestoreService from './firebase/cloudFirestore';
 import { CollectionReferenceDocumentData } from './firebase/types';
 
@@ -10,7 +10,7 @@ class ProjectService {
         return this.projectsDocument.collection(userUid);
     }
 
-    async getProjects(userUid: string): Promise<Project[]> {
+    async getProjects(userUid: string): Promise<IProject[]> {
         return await cloudFirestoreService.getDocuments(this.getUserProjectsCollection(userUid));
     }
 
@@ -19,11 +19,11 @@ class ProjectService {
     }
 
     async initProject(userUid: string) {
-        const tempProject: Project = { id: "_temp", name: "_temp", products: [] };
+        const tempProject: IProject = { id: "_temp", name: "_temp", products: [] };
         return await this.saveProject(userUid, tempProject);
     }
 
-    async saveProject(userUid: string, project: Project): Promise<string> {
+    async saveProject(userUid: string, project: IProject): Promise<string> {
         const docId = await cloudFirestoreService.createDocument(this.getUserProjectsCollection(userUid), project, project.id);
         return docId;
     }

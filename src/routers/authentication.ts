@@ -5,7 +5,7 @@ import environment from '../../env';
 import sessionManagerService from '../services/sessionManager';
 import projectService from "../services/projectService";
 import AppSettings from '../../AppSettings';
-import { CustomRequest } from '../shared/interfaces';
+import { ICustomRequest } from '../shared/interfaces';
 const jwt = require('jsonwebtoken');
 
 const router = Router();
@@ -43,7 +43,7 @@ router.post(AppSettings.RouteSignin, async (req: Request, res: Response) => {
 });
 
 
-router.delete(AppSettings.RouteSignout, async (req: CustomRequest, res: Response) => {
+router.delete(AppSettings.RouteSignout, async (req: ICustomRequest, res: Response) => {
     sessionManagerService.deleteSession(req.userUid);
     res.sendStatus(204);
 });

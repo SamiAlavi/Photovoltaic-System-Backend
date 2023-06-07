@@ -1,8 +1,9 @@
-import { UserImp, CustomUserRecord } from "./interfaces";
+import { User } from "firebase/auth";
+import { ICustomUserRecord } from "./interfaces";
 
 export class Mapper {
-    static mapUserRecord(source: UserImp): CustomUserRecord {
-        const destination: CustomUserRecord = {
+    static mapUserRecord(source: User): ICustomUserRecord {
+        const destination: ICustomUserRecord = {
             uid: source.uid,
             email: source.email ?? "",
         };
