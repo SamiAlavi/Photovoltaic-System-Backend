@@ -3,6 +3,7 @@ import { firebaseAdminApp } from './firebase';
 import { CollectionReferenceOrQuery, CollectionReferenceDocumentData, QueryDocumentData, WhereCondition, DocumentReference } from './types';
 
 class CloudFirestore {
+    private readonly TEMP_FILE_PREFIX = "_";
     database = admin.firestore(firebaseAdminApp);
 
     getDocument(collectionName: string, documentId: string): Promise<any>;
@@ -26,6 +27,21 @@ class CloudFirestore {
         }
     }
 
+    getDocumentsIds(collectionName: string): Promise<string[]>;
+    getDocumentsIds(collectionRef: CollectionReferenceDocumentData): Promise<string[]>;
+
+    async getDocumentsIds(collection: string | CollectionReferenceDocumentData): Promise<string[]> {
+        try {
+            const collectionRef = this.getCollection(collection);
+            const documentReferences = await collectionRef.listDocuments();
+            const documentIds = documentReferences.map(doc => doc.id).filter(id => !id.startsWith(this.TEMP_FILE_PREFIX));
+            return documentIds;
+        }
+        catch (error: any) {
+            this.handleError(error, 'Error getting documents ids');
+        }
+    }
+
     getDocuments(collectionName: string): Promise<any[]>;
     getDocuments(collectionRef: CollectionReferenceOrQuery): Promise<any[]>;
     getDocuments(collectionName: string, ...conditions: WhereCondition[]): Promise<any[]>;
@@ -42,7 +58,7 @@ class CloudFirestore {
             const collectionSnapshot = await collectionRef.get();
             const documents = [];
             collectionSnapshot.docs.forEach(document => {
-                if (!document.id.startsWith("_")) {
+                if (!document.id.startsWith(this.TEMP_FILE_PREFIX)) {
                     documents.push({ id: document.id, ...document.data() });
                 }
             });
