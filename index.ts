@@ -15,6 +15,7 @@ import errorHandler from './src/middlewares/errorHandler';
 import swaggerRoute from './src/routers/swaggerRoute';
 import authenticationRoute from './src/routers/authentication';
 import projectRoute from './src/routers/projects';
+import productRoute from './src/routers/products';
 
 const app = express();
 const port = environment.PORT;
@@ -35,8 +36,8 @@ app.get(AppSettings.RouteBase, (req: Request, res: Response) => {
 });
 
 app.use(AppSettings.RouteApi, authenticationRoute);
-
 app.use(AppSettings.RouteProject, projectRoute);
+app.use(AppSettings.RouteProduct, productRoute);
 
 app.get('/test', (req: ICustomRequest, res: Response) => {
     res.send("Test");

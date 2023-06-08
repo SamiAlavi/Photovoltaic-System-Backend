@@ -12,7 +12,11 @@ interface ICustomRequest extends Request {
 }
 
 interface IProduct {
-    [key: string]: any,
+    name: string,
+    company: string,
+    area: number,
+    power_peak: number,
+    num_cells: string,
 }
 
 interface IProject {
@@ -27,4 +31,5 @@ export {
     ICustomUserRecord,
     ICustomRequest,
     IProject,
+    IProduct,
 };

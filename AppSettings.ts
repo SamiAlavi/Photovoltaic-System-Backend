@@ -5,6 +5,7 @@ class AppSettings {
     static RouteSignin = "/signin";
     static RouteSignout = "/signout";
     static RouteProject = `${this.RouteApi}/project`;
+    static RouteProduct = `${this.RouteApi}/product`;
     static RouteId = `${this.RouteBase}:id`;
 }
 
