@@ -42,6 +42,10 @@ class ProjectService {
     async deleteProject(userUid: string, projectId: string) {
         await cloudFirestoreService.deleteDocument(this.getUserProjectsCollection(userUid), projectId);
     }
+
+    updateProject(userUid: string, project: IProject) {
+        cloudFirestoreService.updateDocument(this.getUserProjectsCollection(userUid), project.id, project);
+    }
 }
 
 export default new ProjectService();

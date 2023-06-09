@@ -91,10 +91,10 @@ class CloudFirestore {
         }
     }
 
-    updateDocument(collectionName: string, data: {}, documentId: string): Promise<any>;
-    updateDocument(collectionName: CollectionReferenceDocumentData, data: {}, documentId: string): Promise<any>;
+    updateDocument(collectionName: string, documentId: string, data: {}): Promise<any>;
+    updateDocument(collectionName: CollectionReferenceDocumentData, documentId: string, data: {}): Promise<any>;
 
-    async updateDocument(collection: string | CollectionReferenceDocumentData, data: {}, documentId: string): Promise<any> {
+    async updateDocument(collection: string | CollectionReferenceDocumentData, documentId: string, data: {}): Promise<any> {
         try {
             const collectionRef = this.getCollection(collection);
             const docRef = collectionRef.doc(documentId);

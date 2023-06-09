@@ -1,7 +1,7 @@
 import { Router, Response } from 'express';
 import projectService from "../services/projectService";
 import AppSettings from '../../AppSettings';
-import { ICustomRequest } from '../shared/interfaces';
+import { ICustomRequest, IProductDetail, IProject } from '../shared/interfaces';
 
 const router = Router();
 
@@ -30,6 +30,17 @@ router.post(AppSettings.RouteBase, async (req: ICustomRequest, res: Response) =>
     try {
         const projectId: string = req.body.id;
         const project = projectService.createProject(req.userUid, projectId);
+        res.status(201).send(project);
+    }
+    catch (error: any) {
+        handleError(res, error);
+    }
+});
+
+router.post(AppSettings.RouteAddProduct, async (req: ICustomRequest, res: Response) => {
+    try {
+        const project: IProject = req.body;
+        projectService.updateProject(req.userUid, project);
         res.status(201).send(project);
     }
     catch (error: any) {

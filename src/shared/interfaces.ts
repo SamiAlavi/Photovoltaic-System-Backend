@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import { ORIENTATION } from './enums';
 
 interface ICustomUserRecord {
     uid: string,
@@ -12,6 +13,7 @@ interface ICustomRequest extends Request {
 }
 
 interface IProduct {
+    id: string,
     name: string,
     company: string,
     area: number,
@@ -21,9 +23,18 @@ interface IProduct {
 
 interface IProject {
     id: string,
-    products: IProduct[],
+    products: IProductDetail[],
     name?: string,
     timeCreated: number,
+}
+
+
+interface IProductDetail extends IProduct {
+    orientation: ORIENTATION,
+    tiltAngle: number,
+    lat: number,
+    lng: number,
+    timestamp: number,
 }
 
 
@@ -32,4 +43,5 @@ export {
     ICustomRequest,
     IProject,
     IProduct,
+    IProductDetail,
 };
