@@ -29,7 +29,7 @@ class VisualCrossing {
                 extendedStats: false,
             };
             const query = Helpers.getQueryParameters(queryParams);
-            const requestUrl = `${this.baseUrl}?${query}`;
+            const requestUrl = `${this.historyUrl}?${query}`;
             const response = await axios.get(requestUrl);
             return response.data;
         }
@@ -37,22 +37,44 @@ class VisualCrossing {
             console.error(error);
         }
     }
+
+    async getLast30DaysTimeline(latitude: number, longitiude: number): Promise<IVisualCrossingDailyForecastData> {
+        const currentDate = new Date();
+        const lastDate = new Date();
+        lastDate.setDate(lastDate.getDate() - 30);
+
+        const response = await this.getTimeline(latitude, longitiude, lastDate, currentDate);
+        return response;
+    }
+
+
     async getTodayForecast(latitude: number, longitiude: number): Promise<IVisualCrossingDailyForecastData> {
+        const currentDate = new Date();
+
+        const response = await this.getTimeline(latitude, longitiude, currentDate, currentDate);
+        return response;
+    }
+
+    private async getTimeline(latitude: number, longitiude: number, fromDate: Date, toDate: Date): Promise<IVisualCrossingDailyForecastData> {
+        const formattedFromDate = Helpers.getFormattedDate(fromDate);
+        const formattedToDate = Helpers.getFormattedDate(toDate);
+
         const queryParams = {
             key: this.API_KEY,
-            include: "days,hours",
+            include: "hours", //days,hours
             elements: "solarradiation",
-            options: "noheaders",
+            options: "noheaders,nonulls",
         };
-        const currentDate = new Date();
-        const formattedDate = Helpers.getFormattedDate(currentDate);
         const query = Helpers.getQueryParameters(queryParams);
-        const requestUrl = `${this.timelineUrl}${latitude},${longitiude}/${formattedDate}/${formattedDate}?${query}`;
+
+        const requestUrl = `${this.timelineUrl}${latitude},${longitiude}/${formattedFromDate}/${formattedToDate}?${query}`;
         const response = await axios.get(requestUrl);
         if (response?.data) {
             return response.data;
         }
         return;
+
+
     }
 }
 
