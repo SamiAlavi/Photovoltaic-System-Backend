@@ -38,6 +38,10 @@ interface IProductDetail extends IProduct {
     region: string,
 }
 
+interface IProjectCollection {
+    collectionId: string,
+    documents: IProject[],
+}
 
 export {
     ICustomUserRecord,
@@ -45,4 +49,5 @@ export {
     IProject,
     IProduct,
     IProductDetail,
+    IProjectCollection,
 };

@@ -15,4 +15,5 @@ export {
     CollectionReferenceDocumentData,
     QueryDocumentData,
     DocumentReference,
+    DocumentData,
 };
