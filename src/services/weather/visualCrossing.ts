@@ -26,7 +26,7 @@ class VisualCrossing {
                 dayEndTime: "0:0:00",
                 aggregateHours: 24,
                 period: "last30days",
-                extendedStats: true,
+                extendedStats: false,
             };
             const query = Helpers.getQueryParameters(queryParams);
             const requestUrl = `${this.baseUrl}?${query}`;
@@ -40,10 +40,14 @@ class VisualCrossing {
     async getTodayForecast(latitude: number, longitiude: number): Promise<IVisualCrossingDailyForecastData> {
         const queryParams = {
             key: this.API_KEY,
+            include: "days,hours",
+            elements: "solarradiation",
+            options: "noheaders",
         };
-        const currentDate = Helpers.getFormattedDate();
+        const currentDate = new Date();
+        const formattedDate = Helpers.getFormattedDate(currentDate);
         const query = Helpers.getQueryParameters(queryParams);
-        const requestUrl = `${this.timelineUrl}${latitude},${longitiude}/${currentDate}/${currentDate}?${query}`;
+        const requestUrl = `${this.timelineUrl}${latitude},${longitiude}/${formattedDate}/${formattedDate}?${query}`;
         const response = await axios.get(requestUrl);
         if (response?.data) {
             return response.data;
