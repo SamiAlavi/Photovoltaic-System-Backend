@@ -84,6 +84,17 @@ class CloudFirestore {
         }
     }
 
+    async propertyInDocumentExists(collectionRef: CollectionReferenceDocumentData, documentId: string, property: string): Promise<boolean> {
+        try {
+            const documentData = await this.getDocument(collectionRef, documentId);
+            return documentData.hasOwnProperty(property);
+        }
+        catch (error: any) {
+            return false;
+        }
+
+    }
+
     createDocument(collectionName: string, data: {}, documentId?: string): Promise<any>;
     createDocument(collectionRef: CollectionReferenceDocumentData, data: {}, documentId?: string): Promise<any>;
 

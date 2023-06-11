@@ -63,10 +63,14 @@ const callback = async () => {
     for (let region in reverseMap) {
         let coords = reverseMap[region];
         for (let i = 0; i < coords.length; i++) {
+            const currentDate = Helpers.getFormattedDate();
+            if (cloudFirestoreService.propertyInDocumentExists(weatherCollection, region, currentDate)) {
+                continue;
+            }
             const [lng, lat, ..._] = coords[i].split(",").map(Number);
             const response = await visualCrossingService.getTodayForecast(lat, lng);
             const data = {
-                [Helpers.getFormattedDate()]: response.days[0].hours,
+                [currentDate]: response.days[0].hours,
             };
             cloudFirestoreService.updateDocument(weatherCollection, region, data);
         }
@@ -78,4 +82,4 @@ callback();
 // every 12 AM
 const job = new cron.CronJob('0 0-23 * * *', callback);
 
-job.start();
+//job.start();
