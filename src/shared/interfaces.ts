@@ -35,6 +35,7 @@ interface IProductDetail extends IProduct {
     lat: number,
     lng: number,
     timestamp: number,
+    region: string,
 }
 
 
