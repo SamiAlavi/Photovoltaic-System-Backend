@@ -1,6 +1,7 @@
-import { IProject } from '../shared/interfaces';
+import { IProductDetail, IProject } from '../shared/interfaces';
 import cloudFirestoreService from './firebase/cloudFirestore';
 import { CollectionReferenceDocumentData } from './firebase/types';
+import visualCrossingService from './weather/visualCrossing';
 
 class ProjectService {
     private projectsKey = "projects";
@@ -41,6 +42,15 @@ class ProjectService {
 
     async deleteProject(userUid: string, projectId: string) {
         await cloudFirestoreService.deleteDocument(this.getUserProjectsCollection(userUid), projectId);
+    }
+
+    async addProductInProject(userUid: string, projectId: string, product: IProductDetail) {
+        const project = await this.getProject(userUid, projectId);
+        project.products.push(product);
+        this.updateProject(userUid, project);
+        const { lat, lng } = product;
+
+        //visualCrossingService.getLast30DaysTimeline(lat, lng);
     }
 
     updateProject(userUid: string, project: IProject) {

@@ -1,9 +1,10 @@
 import cron from 'cron';
 import { cloudFirestoreService } from './services/services';
-import { IProductDetail, IProjectCollection } from './shared/interfaces';
+import { IProductDetail, IProjectCollection, IWeatherData } from './shared/interfaces';
 import accuWeatherService from './services/weather/accuWeather';
 import Helpers from './shared/helpers';
 import visualCrossingService from './services/weather/visualCrossing';
+import weather from './services/weather/weather';
 
 const getLatLngRegionMapping = (collections: IProjectCollection[]) => {
     if (!collections) {
@@ -56,23 +57,14 @@ const callback = async () => {
 
     const projectsKey = "projects";
     const projectsDocument = cloudFirestoreService.database.collection(projectsKey).doc(projectsKey);
-    const weatherCollection = cloudFirestoreService.database.collection("weather");
 
     const collections: IProjectCollection[] = await cloudFirestoreService.getAllCollectionsDataInDocument(projectsDocument);
     const { forwardMap, reverseMap } = getLatLngRegionMapping(collections);
     for (let region in reverseMap) {
         let coords = reverseMap[region];
         for (let i = 0; i < coords.length; i++) {
-            const currentDate = Helpers.getFormattedDate();
-            if (cloudFirestoreService.propertyInDocumentExists(weatherCollection, region, currentDate)) {
-                continue;
-            }
             const [lng, lat, ..._] = coords[i].split(",").map(Number);
-            const response = await visualCrossingService.getTodayForecast(lat, lng);
-            const data = {
-                [currentDate]: response.days[0].hours,
-            };
-            cloudFirestoreService.updateDocument(weatherCollection, region, data);
+            weather.addWeatherDataInRegion(region, new Date(), lng, lat);
         }
     }
 };

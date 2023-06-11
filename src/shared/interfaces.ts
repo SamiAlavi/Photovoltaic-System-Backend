@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { ORIENTATION } from './enums';
+import { CurrentConditions } from '../services/weather/interface-visualCrossing';
 
 interface ICustomUserRecord {
     uid: string,
@@ -43,6 +44,16 @@ interface IProjectCollection {
     documents: IProject[],
 }
 
+interface IAddProductRequest {
+    projectId: string,
+    product: IProductDetail,
+}
+
+interface IWeatherData {
+    [key: string]: CurrentConditions[];
+}
+
+
 export {
     ICustomUserRecord,
     ICustomRequest,
@@ -50,4 +61,6 @@ export {
     IProduct,
     IProductDetail,
     IProjectCollection,
+    IAddProductRequest,
+    IWeatherData,
 };
