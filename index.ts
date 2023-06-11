@@ -21,6 +21,7 @@ const app = express();
 const port = environment.PORT;
 const isProduction = environment.ENVIRONMENT === "production";
 
+app.use(errorHandler);
 app.use(cors());
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
@@ -42,8 +43,6 @@ app.use(AppSettings.RouteProduct, productRoute);
 app.get('/test', (req: ICustomRequest, res: Response) => {
     res.send("Test");
 });
-
-app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

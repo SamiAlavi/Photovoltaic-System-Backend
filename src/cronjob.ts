@@ -3,6 +3,7 @@ import { cloudFirestoreService } from './services/services';
 import { IProductDetail, IProjectCollection } from './shared/interfaces';
 import accuWeatherService from './services/weather/accuWeather';
 import Helpers from './shared/helpers';
+import visualCrossingService from './services/weather/visualCrossing';
 
 const getLatLngRegionMapping = (collections: IProjectCollection[]) => {
     if (!collections) {
@@ -63,9 +64,9 @@ const callback = async () => {
         let coords = reverseMap[region];
         for (let i = 0; i < coords.length; i++) {
             const [lng, lat, ..._] = coords[i].split(",").map(Number);
-            const response = await accuWeatherService.getTodayForecast(lat, lng);
+            const response = await visualCrossingService.getTodayForecast(lat, lng);
             const data = {
-                [Helpers.getFormattedDate()]: response.DailyForecasts[0].Day.SolarIrradiance,
+                [Helpers.getFormattedDate()]: response.days[0].hours,
             };
             cloudFirestoreService.updateDocument(weatherCollection, region, data);
         }

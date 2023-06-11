@@ -3,10 +3,13 @@ import enviroment from '../../../env';
 import Helpers from "../../shared/helpers";
 import { IWeather, IVisualCrossingRequest } from './interfaces';
 import { MeasurementUnitVisualCrossing, ResponseFormat } from "./enums";
+import { IVisualCrossingDailyForecastData } from "./interface-visualCrossing";
 
-class VisualCrossing implements IWeather {
-    API_KEY = enviroment.APIKEY_VISUALCROSSING;
-    baseUrl = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/weatherdata/history/";
+class VisualCrossing {
+    private readonly API_KEY = enviroment.APIKEY_VISUALCROSSING;
+    private readonly baseUrl = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/";
+    private readonly historyUrl = `${this.baseUrl}weatherdata/history/`;
+    private readonly timelineUrl = `${this.baseUrl}timeline/`;
 
     async getCurrentWeatherData(latitude: number, longitude: number, numDays = 1) {
     }
@@ -33,6 +36,19 @@ class VisualCrossing implements IWeather {
         catch (error) {
             console.error(error);
         }
+    }
+    async getTodayForecast(latitude: number, longitiude: number): Promise<IVisualCrossingDailyForecastData> {
+        const queryParams = {
+            key: this.API_KEY,
+        };
+        const currentDate = Helpers.getFormattedDate();
+        const query = Helpers.getQueryParameters(queryParams);
+        const requestUrl = `${this.timelineUrl}${latitude},${longitiude}/${currentDate}/${currentDate}?${query}`;
+        const response = await axios.get(requestUrl);
+        if (response?.data) {
+            return response.data;
+        }
+        return;
     }
 }
 
