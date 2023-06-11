@@ -40,6 +40,7 @@ interface IVisualCrossingRequest extends IWeatherRequest {
     extendedStats: boolean,
 }
 
+
 export {
     IWeather,
     IOpenWeatherMapRequest,
