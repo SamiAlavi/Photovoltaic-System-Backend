@@ -15,7 +15,6 @@ class AccuWeather {
         };
         const query = Helpers.getQueryParameters(queryParams);
         const requestUrl = `${this.geopositionUrl}?${query}`;
-        console.log(requestUrl);
         const response = await axios.get(requestUrl);
         if (response?.data) {
             return response.data['Key'];
@@ -34,7 +33,6 @@ class AccuWeather {
         };
         const query = Helpers.getQueryParameters(queryParams);
         const requestUrl = `${this.dailyForecastUrl}${locationKey}?${query}`;
-        console.log(requestUrl);
         const response = await axios.get(requestUrl);
         if (response?.data) {
             return response.data;

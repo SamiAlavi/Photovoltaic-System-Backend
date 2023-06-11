@@ -1,23 +1,36 @@
 import cron from 'cron';
 import { cloudFirestoreService } from './services/services';
-import { IProjectCollection } from './shared/interfaces';
+import { IProductDetail, IProjectCollection } from './shared/interfaces';
 import accuWeatherService from './services/weather/accuWeather';
+import Helpers from './shared/helpers';
 
-function getLatLngRegionMapping(collections: IProjectCollection[]) {
+const getLatLngRegionMapping = (collections: IProjectCollection[]) => {
     if (!collections) {
         return;
     }
+    const millisecondsPerDay = 24 * 60 * 60 * 1000; // Number of milliseconds in a day
+    const millisecondsPer30Days = millisecondsPerDay * 30; // Number of milliseconds in 30 days
+
+
+    const days30Completed: string[] = [];
     const forwardMap: { [key: string]: string; } = {};
     const reverseMap: { [key: string]: string[]; } = {};
 
     for (let i = 0; i < collections.length; i++) {
-        const documents = collections[i].documents;
-        for (let j = 0; j < documents.length; j++) {
-            const products = documents[j].products;
-            for (let k = 0; k < products.length; k++) {
-                const { lng, lat, region } = products[k];
+        const userId = collections[i].collectionId;
+        const userProjects = collections[i].documents;
+        for (let j = 0; j < userProjects.length; j++) {
+            const userProducts = userProjects[j].products;
+            for (let k = 0; k < userProducts.length; k++) {
+                const product = userProducts[k];
+                const { lng, lat, region, timestamp } = product;
                 const key = `${lng},${lat}`;
                 const value = region || key;
+                const timeDifference = Math.abs(Date.now() - timestamp);
+                if (timeDifference >= millisecondsPer30Days) {
+                    on30daysPassed(userId, product);
+                    continue;
+                }
                 forwardMap[key] = value;
                 try {
                     reverseMap[value].push(key);
@@ -29,22 +42,34 @@ function getLatLngRegionMapping(collections: IProjectCollection[]) {
         }
     }
     return { forwardMap, reverseMap };
-}
+};
+
+const on30daysPassed = (userId: string, product: IProductDetail) => {
+    // generate report
+    // mail to user
+    // set project to readonly?
+};
 
 const callback = async () => {
     console.log(new Date());
 
     const projectsKey = "projects";
     const projectsDocument = cloudFirestoreService.database.collection(projectsKey).doc(projectsKey);
+    const weatherCollection = cloudFirestoreService.database.collection("weather");
+
     const collections: IProjectCollection[] = await cloudFirestoreService.getAllCollectionsDataInDocument(projectsDocument);
     const { forwardMap, reverseMap } = getLatLngRegionMapping(collections);
-    Object.entries(reverseMap).forEach(([region, coords]) => {
-        coords.forEach(async (coord) => {
-            const [lng, lat, ..._] = coord.split(",").map(Number);
-            const resp = await accuWeatherService.getTodayForecast(lat, lng);
-
-        });
-    });
+    for (let region in reverseMap) {
+        let coords = reverseMap[region];
+        for (let i = 0; i < coords.length; i++) {
+            const [lng, lat, ..._] = coords[i].split(",").map(Number);
+            const response = await accuWeatherService.getTodayForecast(lat, lng);
+            const data = {
+                [Helpers.getFormattedDate()]: response.DailyForecasts[0].Day.SolarIrradiance,
+            };
+            cloudFirestoreService.updateDocument(weatherCollection, region, data);
+        }
+    }
 };
 
 callback();

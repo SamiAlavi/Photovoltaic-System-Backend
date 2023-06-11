@@ -113,7 +113,12 @@ class CloudFirestore {
         try {
             const collectionRef = this.getCollection(collection);
             const docRef = collectionRef.doc(documentId);
-            await docRef.update(data);
+            try {
+                await docRef.update(data);
+            }
+            catch {
+                await docRef.set(data);
+            }
             console.log('Document updated successfully!');
         }
         catch (error: any) {
