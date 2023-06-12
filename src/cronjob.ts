@@ -1,11 +1,11 @@
 import cron from 'cron';
 import { cloudFirestoreService } from './services/services';
 import { IProductDetail, IProjectCollection, IWeatherData } from './shared/interfaces';
-import accuWeatherService from './services/weather/accuWeather';
-import Helpers from './shared/helpers';
-import visualCrossingService from './services/weather/visualCrossing';
 import weather from './services/weather/weather';
 import reportService from './services/reportService';
+import firebaseAuth from './services/firebase/firebaseAuth';
+import emailService from './services/emailService';
+import fileService from './services/fileService';
 
 const getLatLngRegionMapping = (collections: IProjectCollection[]) => {
     if (!collections) {
@@ -56,14 +56,16 @@ const on30daysPassed = async (userUid: string, product: IProductDetail) => {
         return;
     }
     // mail to user
-    sendEmailToUser(userUid, filePath);
+    await sendEmailToUser(userUid, filePath, product);
+    fileService.deleteFileSync(filePath);
 
 
     // set project to readonly?
 };
 
-const sendEmailToUser = (userUid: string, filePath: string) => {
-
+const sendEmailToUser = async (userUid: string, filePath: string, product: IProductDetail) => {
+    const userEmail = await firebaseAuth.getUserEmailFromId(userUid);
+    await emailService.sendEmail(userEmail, filePath, product);
 };
 
 const callback = async () => {

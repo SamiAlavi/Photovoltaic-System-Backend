@@ -1,5 +1,6 @@
 import { IProductDetail, IReportData } from "../shared/interfaces";
 import electrictyCalculator from "./electrictyCalculator";
+import fileService from "./fileService";
 import weatherService from "./weather/weather";
 import * as fs from 'fs';
 import * as os from 'os';
@@ -71,7 +72,7 @@ class ReportService {
             // Combine header, data, sum rows
             const csvContent = [csvHeaderRow, ...csvDataRows, sumRow].join('\n');
 
-            fs.writeFileSync(csvPath, csvContent, 'utf8');
+            fileService.writeFileSync(csvPath, csvContent);
 
             console.log('CSV file created!');
 
