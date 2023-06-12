@@ -53,11 +53,6 @@ interface IWeatherData {
     [key: string]: CurrentConditions[];
 }
 
-interface IReport {
-    isGenerated: boolean,
-    path: string,
-}
-
 interface IReportDataRow {
     datetime: string,
     solarradiation: number,
@@ -78,7 +73,6 @@ export {
     IProjectCollection,
     IAddProductRequest,
     IWeatherData,
-    IReport,
     IReportDataRow,
     IReportData,
 };

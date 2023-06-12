@@ -1,28 +1,27 @@
-import { IProductDetail, IReport, IReportData } from "../shared/interfaces";
+import { IProductDetail, IReportData } from "../shared/interfaces";
 import electrictyCalculator from "./electrictyCalculator";
 import weatherService from "./weather/weather";
 import * as fs from 'fs';
+import * as os from 'os';
+import * as path from 'path';
 
 class ReportService {
-    async generateReport(product: IProductDetail): Promise<IReport> {
-        const report: IReport = { isGenerated: false, path: '' };
+    async generateReport(product: IProductDetail): Promise<string> {
         try {
             const weatherData = await weatherService.getWeatherData(product.region);
-            this.generateCSV(product, weatherData);
-            //Object.entries(o)
-            const a = '';
+            return this.generateCSV(product, weatherData);
         }
         catch {
 
         }
-        return report;
+        return '';
     }
 
-    private async generateCSV(product: IProductDetail, data: IReportData): Promise<IReport> {
-        const report = { isGenerated: false, path: '' };
+    private generateCSV(product: IProductDetail, data: IReportData): string {
         try {
 
-            const csvPath = `weather-${product.id}-${Date.now()}.csv`;
+            const csvName = `weather-${product.id}-${Date.now()}.csv`;
+            const csvPath = this.getTempFilePath(csvName);
 
             // Extract all unique datetimes
             const datetimes = Array.from(new Set(Object.values(data).flatMap((arr) => arr.map((obj) => obj.datetime))));
@@ -76,15 +75,17 @@ class ReportService {
 
             console.log('CSV file created!');
 
-            report.isGenerated = true;
-            report.path = csvPath;
+            return csvPath;
         }
         catch { }
-        return report;
+        return '';
     }
 
-    private calculate;
-
+    private getTempFilePath(fileName: string) {
+        const tempFolderPath = os.tmpdir();
+        const filePath = path.join(tempFolderPath, fileName);
+        return filePath;
+    }
 }
 
 

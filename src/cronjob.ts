@@ -47,16 +47,23 @@ const getLatLngRegionMapping = (collections: IProjectCollection[]) => {
     return { forwardMap, reverseMap };
 };
 
-const on30daysPassed = async (userId: string, product: IProductDetail) => {
+const on30daysPassed = async (userUid: string, product: IProductDetail) => {
+    // generate report
     const { lng, lat, region } = product;
     await weather.addLast30DaysDataInRegion(region, lng, lat);
-    const { isGenerated, path } = await reportService.generateReport(product);
-
-
-
-    // generate report
+    const filePath = await reportService.generateReport(product);
+    if (!filePath) {
+        return;
+    }
     // mail to user
+    sendEmailToUser(userUid, filePath);
+
+
     // set project to readonly?
+};
+
+const sendEmailToUser = (userUid: string, filePath: string) => {
+
 };
 
 const callback = async () => {
