@@ -60,7 +60,8 @@ interface IReport {
 
 interface IReportDataRow {
     datetime: string,
-    solarradiation: number;
+    solarradiation: number,
+    electricityGenerated?: number,
 }
 
 interface IReportData {

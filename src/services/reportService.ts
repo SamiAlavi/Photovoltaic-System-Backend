@@ -1,13 +1,14 @@
-import { IReport, IReportData } from "../shared/interfaces";
+import { IProductDetail, IReport, IReportData } from "../shared/interfaces";
+import electrictyCalculator from "./electrictyCalculator";
 import weatherService from "./weather/weather";
 import * as fs from 'fs';
 
 class ReportService {
-    async generateReport(region: string): Promise<IReport> {
+    async generateReport(product: IProductDetail): Promise<IReport> {
         const report: IReport = { isGenerated: false, path: '' };
         try {
-            const weatherData = await weatherService.getWeatherData(region);
-            this.generateCSV(region, weatherData);
+            const weatherData = await weatherService.getWeatherData(product.region);
+            this.generateCSV(product, weatherData);
             //Object.entries(o)
             const a = '';
         }
@@ -17,11 +18,11 @@ class ReportService {
         return report;
     }
 
-    private async generateCSV(region: string, data: IReportData): Promise<IReport> {
+    private async generateCSV(product: IProductDetail, data: IReportData): Promise<IReport> {
         const report = { isGenerated: false, path: '' };
         try {
 
-            const csvPath = `weather-${region}-${Date.now()}.csv`;
+            const csvPath = `weather-${product.id}-${Date.now()}.csv`;
 
             // Extract all unique datetimes
             const datetimes = Array.from(new Set(Object.values(data).flatMap((arr) => arr.map((obj) => obj.datetime))));
@@ -34,8 +35,22 @@ class ReportService {
             const csvDataRows = datetimes.map((datetime) => {
                 const rowData = [datetime];
                 const rowDataByDate = Object.entries(data).reduce((acc, [date, values]) => {
-                    const value = values.find((obj) => obj.datetime === datetime)?.solarradiation ?? '';
-                    acc[date] = value;
+                    const entry = values.find((obj) => obj.datetime === datetime);
+                    const solarRadiation = entry?.solarradiation ?? 0;
+                    let electricityGenerated = 0;
+                    const powerConversionEfficiency = 1;
+                    if (solarRadiation) {
+                        electricityGenerated = electrictyCalculator.calculateElectricityProduced(
+                            solarRadiation,
+                            product.power_peak,
+                            product.orientation,
+                            product.tiltAngle,
+                            product.area,
+                            powerConversionEfficiency
+                        );
+                    }
+                    entry.electricityGenerated = electricityGenerated;
+                    acc[date] = electricityGenerated;
                     return acc;
                 }, {});
                 dates.forEach((date) => {
@@ -46,7 +61,7 @@ class ReportService {
 
             // Calculate the sum of values for each date
             const sumByDate = Object.entries(data).reduce((acc, [date, values]) => {
-                const sum = values.reduce((total, obj) => total + obj.solarradiation, 0);
+                const sum = values.reduce((total, obj) => total + obj.electricityGenerated, 0);
                 acc[date] = sum;
                 return acc;
             }, {});
@@ -67,6 +82,8 @@ class ReportService {
         catch { }
         return report;
     }
+
+    private calculate;
 
 }
 

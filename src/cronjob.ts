@@ -50,7 +50,7 @@ const getLatLngRegionMapping = (collections: IProjectCollection[]) => {
 const on30daysPassed = async (userId: string, product: IProductDetail) => {
     const { lng, lat, region } = product;
     await weather.addLast30DaysDataInRegion(region, lng, lat);
-    const { isGenerated, path } = await reportService.generateReport(region);
+    const { isGenerated, path } = await reportService.generateReport(product);
 
 
 
