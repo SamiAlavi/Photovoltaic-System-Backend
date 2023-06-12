@@ -5,6 +5,7 @@ import accuWeatherService from './services/weather/accuWeather';
 import Helpers from './shared/helpers';
 import visualCrossingService from './services/weather/visualCrossing';
 import weather from './services/weather/weather';
+import reportService from './services/reportService';
 
 const getLatLngRegionMapping = (collections: IProjectCollection[]) => {
     if (!collections) {
@@ -46,7 +47,13 @@ const getLatLngRegionMapping = (collections: IProjectCollection[]) => {
     return { forwardMap, reverseMap };
 };
 
-const on30daysPassed = (userId: string, product: IProductDetail) => {
+const on30daysPassed = async (userId: string, product: IProductDetail) => {
+    const { lng, lat, region } = product;
+    await weather.addLast30DaysDataInRegion(region, lng, lat);
+    const { isGenerated, path } = await reportService.generateReport(region);
+
+
+
     // generate report
     // mail to user
     // set project to readonly?
@@ -64,7 +71,7 @@ const callback = async () => {
         let coords = reverseMap[region];
         for (let i = 0; i < coords.length; i++) {
             const [lng, lat, ..._] = coords[i].split(",").map(Number);
-            weather.addWeatherDataInRegion(region, new Date(), lng, lat);
+            weather.addTodayWeatherDataInRegion(region, lng, lat);
         }
     }
 };
@@ -74,4 +81,4 @@ callback();
 // every 12 AM
 const job = new cron.CronJob('0 0-23 * * *', callback);
 
-//job.start();
+job.start();
