@@ -74,7 +74,7 @@ class ReportService {
 
             fileService.writeFileSync(csvPath, csvContent);
 
-            console.log('CSV file created!');
+            console.log(`CSV file created! (${product.id})`);
 
             return csvPath;
         }

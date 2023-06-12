@@ -15,7 +15,7 @@ const getLatLngRegionMapping = (collections: IProjectCollection[]) => {
     const millisecondsPer30Days = millisecondsPerDay * 30; // Number of milliseconds in 30 days
 
 
-    const days30Completed: string[] = [];
+    const days30Completed: { [key: string]: IProductDetail[]; } = {};
     const forwardMap: { [key: string]: string; } = {};
     const reverseMap: { [key: string]: string[]; } = {};
 
@@ -31,7 +31,12 @@ const getLatLngRegionMapping = (collections: IProjectCollection[]) => {
                 const value = region || key;
                 const timeDifference = Math.abs(Date.now() - timestamp);
                 if (timeDifference >= millisecondsPer30Days) {
-                    on30daysPassed(userId, product);
+                    try {
+                        days30Completed[userId].push(product);
+                    }
+                    catch {
+                        days30Completed[userId] = [product];
+                    }
                     continue;
                 }
                 forwardMap[key] = value;
@@ -44,28 +49,39 @@ const getLatLngRegionMapping = (collections: IProjectCollection[]) => {
             }
         }
     }
-    return { forwardMap, reverseMap };
+    return { days30Completed, forwardMap, reverseMap };
 };
 
-const on30daysPassed = async (userUid: string, product: IProductDetail) => {
+const on30daysPassed = async (userUid: string, products: IProductDetail[]) => {
     // generate report
-    const { lng, lat, region } = product;
-    await weather.addLast30DaysDataInRegion(region, lng, lat);
-    const filePath = await reportService.generateReport(product);
-    if (!filePath) {
-        return;
+    const filePaths = [];
+    for (const product of products) {
+        const { lng, lat, region } = product;
+        await weather.addLast30DaysDataInRegion(region, lng, lat);
+        const filePath = await reportService.generateReport(product);
+        filePaths.push(filePath);
     }
     // mail to user
-    await sendEmailToUser(userUid, filePath, product);
-    fileService.deleteFileSync(filePath);
+    await sendEmailToUser(userUid, filePaths, products);
+    fileService.deleteFilesSync(filePaths);
 
 
     // set project to readonly?
 };
 
-const sendEmailToUser = async (userUid: string, filePath: string, product: IProductDetail) => {
+const sendEmailToUser = async (userUid: string, filePaths: string[], products: IProductDetail[]) => {
     const userEmail = await firebaseAuth.getUserEmailFromId(userUid);
-    await emailService.sendEmail(userEmail, filePath, product);
+    await emailService.sendEmail(userEmail, filePaths, products);
+};
+
+const on30DaysCompleted = (days30Completed: { [key: string]: IProductDetail[]; }) => {
+    for (const [userUid, products] of Object.entries(days30Completed)) {
+        {
+            setTimeout(() => {
+                on30daysPassed(userUid, products);
+            });
+        }
+    }
 };
 
 const callback = async () => {
@@ -75,7 +91,8 @@ const callback = async () => {
     const projectsDocument = cloudFirestoreService.database.collection(projectsKey).doc(projectsKey);
 
     const collections: IProjectCollection[] = await cloudFirestoreService.getAllCollectionsDataInDocument(projectsDocument);
-    const { forwardMap, reverseMap } = getLatLngRegionMapping(collections);
+    const { days30Completed, forwardMap, reverseMap } = getLatLngRegionMapping(collections);
+    on30DaysCompleted(days30Completed);
     for (let region in reverseMap) {
         let coords = reverseMap[region];
         for (let i = 0; i < coords.length; i++) {
