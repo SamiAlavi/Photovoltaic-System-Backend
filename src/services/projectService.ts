@@ -24,7 +24,7 @@ class ProjectService {
     }
 
     async initProject(userUid: string) {
-        const tempProject: IProject = { id: "_temp", products: [], timeCreated: Date.now() };
+        const tempProject: IProject = { id: "_temp", products: [], timeCreated: Date.now(), isActive: false };
         return await this.saveProject(userUid, tempProject);
     }
 
@@ -34,7 +34,7 @@ class ProjectService {
     }
 
     createProject(userUid: string, projectId: string): IProject {
-        const project: IProject = { id: projectId, products: [], timeCreated: Date.now() };
+        const project: IProject = { id: projectId, products: [], timeCreated: Date.now(), isActive: true };
         this.saveProject(userUid, project);
         return project;
     }
@@ -48,9 +48,6 @@ class ProjectService {
         const project = await this.getProject(userUid, projectId);
         project.products.push(product);
         this.updateProject(userUid, project);
-        const { lat, lng } = product;
-
-        //visualCrossingService.getLast30DaysTimeline(lat, lng);
     }
 
     updateProject(userUid: string, project: IProject) {

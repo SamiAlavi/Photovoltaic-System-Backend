@@ -25,8 +25,8 @@ interface IProduct {
 interface IProject {
     id: string,
     products: IProductDetail[],
-    name?: string,
     timeCreated: number,
+    isActive: boolean,
 }
 
 
@@ -37,6 +37,7 @@ interface IProductDetail extends IProduct {
     lng: number,
     timestamp: number,
     region: string,
+    isActive: boolean,
 }
 
 interface IProjectCollection {

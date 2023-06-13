@@ -6,8 +6,9 @@ import reportService from './services/reportService';
 import firebaseAuth from './services/firebase/firebaseAuth';
 import emailService from './services/emailService';
 import fileService from './services/fileService';
+import projectService from './services/projectService';
 
-const getLatLngRegionMapping = (collections: IProjectCollection[]) => {
+const getMappings = (collections: IProjectCollection[]) => {
     if (!collections) {
         return;
     }
@@ -21,21 +22,23 @@ const getLatLngRegionMapping = (collections: IProjectCollection[]) => {
 
     for (let i = 0; i < collections.length; i++) {
         const userId = collections[i].collectionId;
-        const userProjects = collections[i].documents;
-        for (let j = 0; j < userProjects.length; j++) {
-            const userProducts = userProjects[j].products;
-            for (let k = 0; k < userProducts.length; k++) {
-                const product = userProducts[k];
+        const projects = collections[i].documents;
+        for (let j = 0; j < projects.length; j++) {
+            const project = projects[j];
+            const products = project.products;
+            for (let k = 0; k < products.length; k++) {
+                const product = products[k];
                 const { lng, lat, region, timestamp } = product;
                 const key = `${lng},${lat}`;
                 const value = region || key;
                 const timeDifference = Math.abs(Date.now() - timestamp);
                 if (timeDifference >= millisecondsPer30Days) {
+                    const key = `${userId}~${project.id}`;
                     try {
-                        days30Completed[userId].push(product);
+                        days30Completed[key].push(product);
                     }
                     catch {
-                        days30Completed[userId] = [product];
+                        days30Completed[key] = [product];
                     }
                     continue;
                 }
@@ -52,7 +55,7 @@ const getLatLngRegionMapping = (collections: IProjectCollection[]) => {
     return { days30Completed, forwardMap, reverseMap };
 };
 
-const on30daysPassed = async (userUid: string, products: IProductDetail[]) => {
+const on30daysPassed = async (userUid: string, projectId: string, products: IProductDetail[]) => {
     // generate report
     const filePaths = [];
     for (const product of products) {
@@ -65,8 +68,20 @@ const on30daysPassed = async (userUid: string, products: IProductDetail[]) => {
     await sendEmailToUser(userUid, filePaths, products);
     fileService.deleteFilesSync(filePaths);
 
+    // set products, project to readonly
+    for (const product of products) {
+        const project = await projectService.getProject(userUid, projectId);
+        const dbProducts = project.products;
+        const dbProduct = dbProducts.find((prod) => prod.id === product.id);
+        if (dbProduct) {
+            dbProduct.isActive = false;
+            const isProjectActive = dbProducts.some((prod) => prod.isActive);
+            project.isActive = isProjectActive;
+            await projectService.updateProject(userUid, project);
+        }
+    };
 
-    // set project to readonly?
+
 };
 
 const sendEmailToUser = async (userUid: string, filePaths: string[], products: IProductDetail[]) => {
@@ -75,10 +90,11 @@ const sendEmailToUser = async (userUid: string, filePaths: string[], products: I
 };
 
 const on30DaysCompleted = (days30Completed: { [key: string]: IProductDetail[]; }) => {
-    for (const [userUid, products] of Object.entries(days30Completed)) {
+    for (const [key, products] of Object.entries(days30Completed)) {
         {
             setTimeout(() => {
-                on30daysPassed(userUid, products);
+                const [userUid, projectId] = key.split('~', 2);
+                on30daysPassed(userUid, projectId, products);
             });
         }
     }
@@ -91,7 +107,7 @@ const callback = async () => {
     const projectsDocument = cloudFirestoreService.database.collection(projectsKey).doc(projectsKey);
 
     const collections: IProjectCollection[] = await cloudFirestoreService.getAllCollectionsDataInDocument(projectsDocument);
-    const { days30Completed, forwardMap, reverseMap } = getLatLngRegionMapping(collections);
+    const { days30Completed, forwardMap, reverseMap } = getMappings(collections);
     on30DaysCompleted(days30Completed);
     for (let region in reverseMap) {
         let coords = reverseMap[region];
@@ -104,7 +120,7 @@ const callback = async () => {
 
 callback();
 
-// every 12 AM
-const job = new cron.CronJob('0 0-23 * * *', callback);
+// every 12.05 AM
+const job = new cron.CronJob('5 0 * * *', callback);
 
 job.start();

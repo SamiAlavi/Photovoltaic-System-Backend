@@ -41,7 +41,7 @@ router.post(AppSettings.RouteAddProduct, async (req: ICustomRequest, res: Respon
     try {
         const { projectId, product } = req.body as IAddProductRequest;
         projectService.addProductInProject(req.userUid, projectId, product);
-        res.sendStatus(201);
+        res.status(201).send({});
     }
     catch (error: any) {
         handleError(res, error);
