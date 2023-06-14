@@ -1,6 +1,6 @@
 import admin from 'firebase-admin';
 import enviroment from '../../../env';
-const firebase = require('firebase/app');
+import * as firebase from 'firebase/app';
 import firebaseConfig from './firebaseConfig';
 
 const firebaseAdminApp = admin.initializeApp({
