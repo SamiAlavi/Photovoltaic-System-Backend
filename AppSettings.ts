@@ -11,7 +11,7 @@ class AppSettings {
     static RouteSignout = `/signout`;
     static RouteProject = `${this.RouteApi}${this.Project}`;
     static RouteProduct = `${this.RouteApi}${this.Product}`;
-    static RouteAddProduct = `${this.Product}`;
+    static RouteAddEditDeleteProduct = `${this.Product}`;
 }
 
 export default AppSettings;

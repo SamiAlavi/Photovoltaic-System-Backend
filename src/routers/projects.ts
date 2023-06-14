@@ -47,10 +47,21 @@ router.delete(AppSettings.RouteBase, async (req: ICustomRequest, res: Response) 
     }
 });
 
-router.post(AppSettings.RouteAddProduct, async (req: ICustomRequest, res: Response) => {
+router.post(AppSettings.RouteAddEditDeleteProduct, async (req: ICustomRequest, res: Response) => {
     try {
         const { projectId, product } = req.body as IAddProductRequest;
         projectService.addProductInProject(req.userUid, projectId, product);
+        res.status(201).send({});
+    }
+    catch (error: any) {
+        handleError(res, error);
+    }
+});
+
+router.put(AppSettings.RouteAddEditDeleteProduct, async (req: ICustomRequest, res: Response) => {
+    try {
+        const { projectId, product } = req.body as IAddProductRequest;
+        projectService.editProductInProject(req.userUid, projectId, product);
         res.status(201).send({});
     }
     catch (error: any) {
