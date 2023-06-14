@@ -1,6 +1,7 @@
 class AppSettings {
     static Project = "/project";
     static Product = "/product";
+    static Profile = "/profile";
 
     static RouteBase = "/";
     static RouteId = `${this.RouteBase}:id`;

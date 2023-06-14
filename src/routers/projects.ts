@@ -28,9 +28,19 @@ router.get(AppSettings.RouteId, async (req: ICustomRequest, res: Response) => {
 
 router.post(AppSettings.RouteBase, async (req: ICustomRequest, res: Response) => {
     try {
-        const projectId: string = req.body.id;
+        const projectId: string = req.body.projectId;
         const project = projectService.createProject(req.userUid, projectId);
         res.status(201).send(project);
+    }
+    catch (error: any) {
+        handleError(res, error);
+    }
+});
+router.delete(AppSettings.RouteBase, async (req: ICustomRequest, res: Response) => {
+    try {
+        const projectId: string = req.body.projectId;
+        projectService.deleteProject(req.userUid, projectId);
+        res.status(204).send(true);
     }
     catch (error: any) {
         handleError(res, error);

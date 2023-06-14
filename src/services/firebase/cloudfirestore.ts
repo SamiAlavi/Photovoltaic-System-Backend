@@ -161,7 +161,6 @@ class CloudFirestore {
 
     private handleError(error: Error, message: string) {
         console.error(`${message}: ${error}`);
-        throw error;
     }
 }
 

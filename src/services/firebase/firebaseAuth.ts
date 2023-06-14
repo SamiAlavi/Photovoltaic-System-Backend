@@ -28,6 +28,15 @@ class FirebaseAuth {
         }
     }
 
+    async updateUserPassword(userUid: string, email: string, currentPassword: string, newPassword: string) {
+        await this.loginEmailPasswordBasedAccount(email, currentPassword);
+        await this.adminAuth.updateUser(userUid, {
+            password: newPassword,
+        });
+
+        console.log('Password updated successfully.');
+    }
+
 }
 
 export default new FirebaseAuth();

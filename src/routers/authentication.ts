@@ -44,8 +44,24 @@ router.post(AppSettings.RouteSignin, async (req: Request, res: Response) => {
 
 
 router.delete(AppSettings.RouteSignout, async (req: ICustomRequest, res: Response) => {
-    sessionManagerService.deleteSession(req.userUid);
+    try {
+        sessionManagerService.deleteSession(req.userUid);
+    }
+    catch {
+    }
     res.sendStatus(204);
+});
+
+router.post(AppSettings.Profile, async (req: ICustomRequest, res: Response) => {
+    try {
+        const userUid = req.userUid;
+        const { email, currentPassword, newPassword } = req.body;
+        await firebaseAuth.updateUserPassword(userUid, email, currentPassword, newPassword);
+        res.status(200).send({});
+    }
+    catch (error: any) {
+        handleError(res, error);
+    }
 });
 
 function handleError(res: Response, error: Error) {

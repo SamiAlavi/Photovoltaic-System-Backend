@@ -19,11 +19,18 @@ const authenticate = async (req: ICustomRequest, res: Response, next: NextFuncti
     const token = req.headers.authorization?.split(' ').at(-1) ?? "";
     const userUid = req.headers['x-uid'] as string;
 
+    req.userUid = userUid;
+    if (req.path === `${AppSettings.RouteApi}${AppSettings.RouteSignout}`) {
+        next();
+        return;
+    }
+
     if (!token) {
         return res.status(401).json({ message: 'Missing token' });
     }
 
     try {
+
         // Verify the token using your secret key or public key
         const decoded = jwt.verify(token, secret) as ICustomUserRecord;
         const document: ICustomUserRecord = await sessionManager.getSession(userUid);
@@ -32,7 +39,6 @@ const authenticate = async (req: ICustomRequest, res: Response, next: NextFuncti
         if (!(isSameUser && isSameToken)) {
             return res.status(403).json({ message: 'Token is not for the same user' });
         }
-        req.userUid = userUid;
         next();
     } catch (error: any) {
         let message = 'Invalid token';
