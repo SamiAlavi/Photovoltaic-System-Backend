@@ -62,7 +62,18 @@ router.put(AppSettings.RouteAddEditDeleteProduct, async (req: ICustomRequest, re
     try {
         const { projectId, product } = req.body as IAddProductRequest;
         projectService.editProductInProject(req.userUid, projectId, product);
-        res.status(201).send({});
+        res.status(204).send({});
+    }
+    catch (error: any) {
+        handleError(res, error);
+    }
+});
+
+router.delete(AppSettings.RouteAddEditDeleteProduct, async (req: ICustomRequest, res: Response) => {
+    try {
+        const { projectId, product } = req.body as IAddProductRequest;
+        projectService.deleteProductInProject(req.userUid, projectId, product);
+        res.status(204).send({});
     }
     catch (error: any) {
         handleError(res, error);

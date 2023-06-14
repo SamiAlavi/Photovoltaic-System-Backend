@@ -63,6 +63,13 @@ class ProjectService {
         this.updateProject(userUid, project);
     }
 
+    async deleteProductInProject(userUid: string, projectId: string, product: IProductDetail) {
+        const project = await this.getProject(userUid, projectId);
+        project.products = project.products.filter((prod) => prod.id !== product.id);
+        this.updateProject(userUid, project);
+    }
+
+
     updateProject(userUid: string, project: IProject) {
         cloudFirestoreService.updateDocument(this.getUserProjectsCollection(userUid), project.id, project);
     }
