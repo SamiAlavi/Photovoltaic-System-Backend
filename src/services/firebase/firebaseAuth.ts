@@ -28,13 +28,28 @@ class FirebaseAuth {
         }
     }
 
+    async verifyUserEmail(userUid: string, email: string) {
+        const userEmail = await this.getUserEmailFromId(userUid);
+        if (userEmail !== email) {
+            throw Error("Email is not correct");
+        }
+    }
+
     async updateUserPassword(userUid: string, email: string, currentPassword: string, newPassword: string) {
+        await this.verifyUserEmail(userUid, email);
         await this.loginEmailPasswordBasedAccount(email, currentPassword);
         await this.adminAuth.updateUser(userUid, {
             password: newPassword,
         });
 
         console.log('Password updated successfully.');
+    }
+
+    async deleteUser(userUid: string, email: string, currentPassword: string,) {
+        //await this.verifyUserEmail(userUid, email);
+        //await this.loginEmailPasswordBasedAccount(email, currentPassword);
+        await this.adminAuth.deleteUser(userUid);
+        console.log('User deleted successfully.');
     }
 
 }

@@ -64,6 +64,22 @@ router.post(AppSettings.Profile, async (req: ICustomRequest, res: Response) => {
     }
 });
 
+router.delete(AppSettings.Profile, async (req: ICustomRequest, res: Response) => {
+    try {
+        const userUid = req.userUid;
+        const { email, currentPassword } = req.body;
+        await firebaseAuth.deleteUser(userUid, email, currentPassword);
+        await sessionManagerService.deleteSession(userUid);
+        await projectService.deleteAllProjects(userUid);
+        res.status(204).send({});
+    }
+    catch (error: any) {
+        handleError(res, error);
+    }
+});
+
+
+
 function handleError(res: Response, error: Error) {
     res.status(400).send({
         message: error.message,

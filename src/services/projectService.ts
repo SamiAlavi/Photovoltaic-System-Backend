@@ -44,6 +44,10 @@ class ProjectService {
         await cloudFirestoreService.deleteDocument(this.getUserProjectsCollection(userUid), projectId);
     }
 
+    async deleteAllProjects(userUid: string) {
+        await cloudFirestoreService.deleteCollection(this.getUserProjectsCollection(userUid));
+    }
+
     async addProductInProject(userUid: string, projectId: string, product: IProductDetail) {
         const project = await this.getProject(userUid, projectId);
         project.products.push(product);

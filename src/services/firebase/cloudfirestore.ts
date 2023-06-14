@@ -152,6 +152,30 @@ class CloudFirestore {
         }
     }
 
+    deleteCollection(collectionName: string): Promise<void>;
+    deleteCollection(collectionName: CollectionReferenceDocumentData): Promise<void>;
+
+    async deleteCollection(collection: string | CollectionReferenceDocumentData) {
+        try {
+            const collectionRef = this.getCollection(collection);
+
+            const batch = this.database.batch();
+            const querySnapshot = await collectionRef.get();
+
+            querySnapshot.forEach((doc) => {
+                batch.delete(doc.ref);
+            });
+
+            await batch.commit();
+
+            console.log('Collection deleted successfully.');
+
+        }
+        catch (error: any) {
+
+        }
+    }
+
     private getCollection(collection: string | CollectionReferenceDocumentData): CollectionReferenceDocumentData;
     private getCollection(collection: string | CollectionReferenceOrQuery): CollectionReferenceOrQuery;
 
