@@ -1,7 +1,6 @@
-import { IProductDetail, IProject } from '../shared/interfaces';
+import { IProductDetail, IProject, IProjectCollection } from '../shared/interfaces';
 import cloudFirestoreService from './firebase/cloudFirestore';
 import { CollectionReferenceDocumentData } from './firebase/types';
-import visualCrossingService from './weather/visualCrossing';
 
 class ProjectService {
     private projectsKey = "projects";
@@ -72,6 +71,10 @@ class ProjectService {
 
     updateProject(userUid: string, project: IProject) {
         cloudFirestoreService.updateDocument(this.getUserProjectsCollection(userUid), project.id, project);
+    }
+
+    async getAllUsersCollections(): Promise<IProjectCollection[]> {
+        return await cloudFirestoreService.getAllCollectionsDataInDocument(this.projectsDocument);
     }
 }
 

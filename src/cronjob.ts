@@ -1,6 +1,5 @@
 import cron from 'cron';
-import { cloudFirestoreService } from './services/services';
-import { IProductDetail, IProjectCollection, IWeatherData } from './shared/interfaces';
+import { IProductDetail, IProjectCollection } from './shared/interfaces';
 import weather from './services/weather/weather';
 import reportService from './services/reportService';
 import firebaseAuth from './services/firebase/firebaseAuth';
@@ -101,12 +100,9 @@ const on30DaysCompleted = (days30Completed: { [key: string]: IProductDetail[]; }
 };
 
 const callback = async () => {
-    console.log(new Date());
+    console.log(`Cron Job ran at ${new Date()}`);
 
-    const projectsKey = "projects";
-    const projectsDocument = cloudFirestoreService.database.collection(projectsKey).doc(projectsKey);
-
-    const collections: IProjectCollection[] = await cloudFirestoreService.getAllCollectionsDataInDocument(projectsDocument);
+    const collections = await projectService.getAllUsersCollections();
     const { days30Completed, forwardMap, reverseMap } = getMappings(collections);
     on30DaysCompleted(days30Completed);
     for (let region in reverseMap) {

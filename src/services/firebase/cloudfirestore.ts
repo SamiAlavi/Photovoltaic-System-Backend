@@ -38,7 +38,7 @@ class CloudFirestore {
             }
         }
         catch (error: any) {
-            this.handleError(error, 'Error getting document');
+            this.handleError(error, `Error getting document (${documentId})`);
         }
     }
 
@@ -109,7 +109,7 @@ class CloudFirestore {
             else {
                 docRef = await collectionRef.add(data);
             }
-            console.log('Document created with ID:', docRef.id);
+            console.log(`Document created with ID (${docRef.id})`);
             return docRef.id;
         }
         catch (error: any) {
@@ -130,10 +130,10 @@ class CloudFirestore {
             catch {
                 await docRef.set(data);
             }
-            console.log('Document updated successfully!');
+            console.log(`Document updated successfully! (${documentId})`);
         }
         catch (error: any) {
-            this.handleError(error, 'Error updating document');
+            this.handleError(error, `Error updating document (${documentId})`);
         }
     }
 
@@ -145,10 +145,10 @@ class CloudFirestore {
             const collectionRef = this.getCollection(collection);
             const docRef = collectionRef.doc(documentId);
             await docRef.delete();
-            console.log('Document deleted successfully!');
+            console.log(`Document deleted successfully! (${documentId})`);
         }
         catch (error: any) {
-            this.handleError(error, 'Error deleting document');
+            this.handleError(error, `Error deleting document (${documentId})`);
         }
     }
 
@@ -168,11 +168,11 @@ class CloudFirestore {
 
             await batch.commit();
 
-            console.log('Collection deleted successfully.');
+            console.log(`Collection deleted successfully. (${collectionRef.id})`);
 
         }
         catch (error: any) {
-
+            this.handleError(error, `Error deleting collection`);
         }
     }
 
