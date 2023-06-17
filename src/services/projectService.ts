@@ -1,6 +1,7 @@
-import { IProductDetail, IProject, IProjectCollection } from '../shared/interfaces';
+import { IProductDetail, IProject, IProjectCollection, IReportData } from '../shared/interfaces';
 import cloudFirestoreService from './firebase/cloudFirestore';
 import { CollectionReferenceDocumentData } from './firebase/types';
+import weatherService from './weather/weather';
 
 class ProjectService {
     private projectsKey = "projects";
@@ -59,7 +60,7 @@ class ProjectService {
         if (prodIndex > -1) {
             project.products[prodIndex] = product;
         }
-        this.updateProject(userUid, project);
+        await this.updateProject(userUid, project);
     }
 
     async deleteProductInProject(userUid: string, projectId: string, product: IProductDetail) {
@@ -75,6 +76,14 @@ class ProjectService {
 
     async getAllUsersCollections(): Promise<IProjectCollection[]> {
         return await cloudFirestoreService.getAllCollectionsDataInDocument(this.projectsDocument);
+    }
+
+    async generateProductReport(userUid: string, projectId: string, product: IProductDetail): Promise<void> {
+        const { lng, lat, region } = product;
+        await weatherService.addLast30DaysDataInRegion(region, lat, lng);
+        const weatherData = await weatherService.getLast30DaysWeatherData(region);
+        product.report = weatherData;
+        await this.editProductInProject(userUid, projectId, product);
     }
 }
 

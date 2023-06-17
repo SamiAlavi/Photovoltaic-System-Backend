@@ -2,14 +2,13 @@ import { IProductDetail, IReportData } from "../shared/interfaces";
 import electrictyCalculator from "./electrictyCalculator";
 import fileService from "./fileService";
 import weatherService from "./weather/weather";
-import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 
 class ReportService {
     async generateReport(product: IProductDetail): Promise<string> {
         try {
-            const weatherData = await weatherService.getWeatherData(product.region);
+            const weatherData = await weatherService.getLast30DaysWeatherData(product.region);
             return this.generateCSV(product, weatherData);
         }
         catch {

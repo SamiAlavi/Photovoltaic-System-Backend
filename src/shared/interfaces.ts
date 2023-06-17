@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { ORIENTATION } from './enums';
-import { CurrentConditions } from '../services/weather/interface-visualCrossing';
+import { CurrentConditions, IVisualCrossingDailyForecastData } from '../services/weather/interface-visualCrossing';
 
 interface ICustomUserRecord {
     uid: string,
@@ -38,6 +38,7 @@ interface IProductDetail extends IProduct {
     timestamp: number,
     region: string,
     isActive: boolean,
+    report?: IReportData,
 }
 
 interface IProjectCollection {

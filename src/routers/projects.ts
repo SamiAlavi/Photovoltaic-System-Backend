@@ -80,6 +80,17 @@ router.delete(AppSettings.RouteAddEditDeleteProduct, async (req: ICustomRequest,
     }
 });
 
+router.post(AppSettings.RouteProductReport, async (req: ICustomRequest, res: Response) => {
+    try {
+        const { projectId, product } = req.body as IAddProductRequest;
+        await projectService.generateProductReport(req.userUid, projectId, product);
+        res.status(200).send({});
+    }
+    catch (error: any) {
+        handleError(res, error);
+    }
+});
+
 function handleError(res: Response, error: Error) {
     res.status(400).send({
         message: error.message,

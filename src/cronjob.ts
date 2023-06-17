@@ -1,6 +1,6 @@
 import cron from 'cron';
 import { IProductDetail, IProjectCollection } from './shared/interfaces';
-import weather from './services/weather/weather';
+import weatherService from './services/weather/weather';
 import reportService from './services/reportService';
 import firebaseAuth from './services/firebase/firebaseAuth';
 import emailService from './services/emailService';
@@ -59,7 +59,7 @@ const on30daysPassed = async (userUid: string, projectId: string, products: IPro
     const filePaths = [];
     for (const product of products) {
         const { lng, lat, region } = product;
-        await weather.addLast30DaysDataInRegion(region, lng, lat);
+        await weatherService.addLast30DaysDataInRegion(region, lng, lat);
         const filePath = await reportService.generateReport(product);
         filePaths.push(filePath);
     }
@@ -109,7 +109,7 @@ const callback = async () => {
         let coords = reverseMap[region];
         for (let i = 0; i < coords.length; i++) {
             const [lng, lat, ..._] = coords[i].split(",").map(Number);
-            weather.addTodayWeatherDataInRegion(region, lng, lat);
+            weatherService.addTodayWeatherDataInRegion(region, lng, lat);
         }
     }
 };

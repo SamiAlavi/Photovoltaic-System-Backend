@@ -40,6 +40,20 @@ class Weather {
         return weatherDocument;
     }
 
+    async getLast30DaysWeatherData(region: string): Promise<IReportData> {
+        const reportData: IReportData = {};
+        const weatherDocument = await this.getWeatherData(region);
+        const date = new Date();
+        const last30days = 30;
+        const step = 1;
+        for (let i = 1; i <= last30days; i++) {
+            date.setDate(date.getDate() - step);
+            const formattedDate = Helpers.getFormattedDate(date);
+            reportData[formattedDate] = weatherDocument[formattedDate] ?? [];
+        }
+        return reportData;
+    }
+
 }
 
 export default new Weather();
