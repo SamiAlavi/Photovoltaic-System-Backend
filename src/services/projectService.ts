@@ -1,5 +1,7 @@
 import { IProductDetail, IProject, IProjectCollection, IReportData, IReportJSON } from '../shared/interfaces';
+import emailService from './emailService';
 import cloudFirestoreService from './firebase/cloudFirestore';
+import firebaseAuth from './firebase/firebaseAuth';
 import { CollectionReferenceDocumentData } from './firebase/types';
 import reportService from './reportService';
 import weatherService from './weather/weather';
@@ -81,6 +83,9 @@ class ProjectService {
 
     async generateProductReport(userUid: string, projectId: string, product: IProductDetail): Promise<IReportJSON> {
         const reportJson = await reportService.generateReportJSON(product);
+        const filePath = await reportService.generateReport(product);
+        const userEmail = await firebaseAuth.getUserEmailFromId(userUid);
+        emailService.sendEmail(userEmail, [filePath], [product]);
         product.isActive = false;
         product.report = reportJson;
         this.editProductInProject(userUid, projectId, product);
