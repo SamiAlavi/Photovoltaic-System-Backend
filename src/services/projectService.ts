@@ -1,6 +1,7 @@
-import { IProductDetail, IProject, IProjectCollection, IReportData } from '../shared/interfaces';
+import { IProductDetail, IProject, IProjectCollection, IReportData, IReportJSON } from '../shared/interfaces';
 import cloudFirestoreService from './firebase/cloudFirestore';
 import { CollectionReferenceDocumentData } from './firebase/types';
+import reportService from './reportService';
 import weatherService from './weather/weather';
 
 class ProjectService {
@@ -78,12 +79,12 @@ class ProjectService {
         return await cloudFirestoreService.getAllCollectionsDataInDocument(this.projectsDocument);
     }
 
-    async generateProductReport(userUid: string, projectId: string, product: IProductDetail): Promise<void> {
-        const { lng, lat, region } = product;
-        await weatherService.addLast30DaysDataInRegion(region, lat, lng);
-        const weatherData = await weatherService.getLast30DaysWeatherData(region);
-        product.report = weatherData;
-        await this.editProductInProject(userUid, projectId, product);
+    async generateProductReport(userUid: string, projectId: string, product: IProductDetail): Promise<IReportJSON> {
+        const reportJson = await reportService.generateReportJSON(product);
+        product.isActive = false;
+        product.report = reportJson;
+        this.editProductInProject(userUid, projectId, product);
+        return reportJson;
     }
 }
 

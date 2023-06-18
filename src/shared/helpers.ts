@@ -11,6 +11,12 @@ class Helpers {
         const formattedDate = `${year}-${month}-${day}`;
         return formattedDate;
     }
+
+    static sortObjectKeys(object: Object): Object {
+        const sortedArray = Object.entries(object).sort();
+        const sortedObj = Object.fromEntries(sortedArray);
+        return sortedObj;
+    }
 }
 
 export default Helpers;

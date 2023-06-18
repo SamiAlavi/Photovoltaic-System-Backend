@@ -40,7 +40,7 @@ interface IProductDetail extends IProduct {
     region: string,
     isActive: boolean,
     num_panels: number,
-    report?: IReportData,
+    report?: IReportJSON,
 }
 
 interface IProjectCollection {
@@ -67,6 +67,11 @@ interface IReportData {
     [key: string]: IReportDataRow[],
 }
 
+interface IReportJSON {
+    datetimes: string[],
+    electrictyProduced: number[],
+}
+
 
 export {
     ICustomUserRecord,
@@ -79,4 +84,5 @@ export {
     IWeatherData,
     IReportDataRow,
     IReportData,
+    IReportJSON,
 };

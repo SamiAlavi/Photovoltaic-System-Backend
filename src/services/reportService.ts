@@ -1,4 +1,6 @@
-import { IProductDetail, IReportData } from "../shared/interfaces";
+import { report } from "process";
+import Helpers from "../shared/helpers";
+import { IProductDetail, IReportData, IReportJSON } from "../shared/interfaces";
 import electrictyCalculator from "./electrictyCalculator";
 import fileService from "./fileService";
 import weatherService from "./weather/weather";
@@ -17,23 +19,39 @@ class ReportService {
         return '';
     }
 
-    private generateCSV(product: IProductDetail, data: IReportData): string {
+    async generateReportJSON(product: IProductDetail): Promise<IReportJSON> {
+        try {
+            const { lng, lat, region } = product;
+            await weatherService.addLast30DaysDataInRegion(region, lat, lng);
+            const weatherData = await weatherService.getLast30DaysWeatherData(region);
+            return this.generateJSON(product, weatherData);
+        }
+        catch {
+
+        }
+        return {
+            datetimes: [],
+            electrictyProduced: [],
+        };
+    }
+
+    private generateCSV(product: IProductDetail, weatherData: IReportData): string {
         try {
 
             const csvName = `weather-${product.id}-${Date.now()}.csv`;
             const csvPath = this.getTempFilePath(csvName);
 
             // Extract all unique datetimes
-            const datetimes = Array.from(new Set(Object.values(data).flatMap((arr) => arr.map((obj) => obj.datetime))));
+            const datetimes = Array.from(new Set(Object.values(weatherData).flatMap((arr) => arr.map((obj) => obj.datetime))));
 
             // Prepare the CSV header row
-            const dates = Object.keys(data);
+            const dates = Object.keys(weatherData);
             const csvHeaderRow = ['Time\\Date', ...dates].join(',');
 
             // Prepare the CSV data rows
             const csvDataRows = datetimes.map((datetime) => {
                 const rowData = [datetime];
-                const rowDataByDate = Object.entries(data).reduce((acc, [date, values]) => {
+                const rowDataByDate = Object.entries(weatherData).reduce((acc, [date, values]) => {
                     const entry = values.find((obj) => obj.datetime === datetime);
                     const solarRadiation = entry?.solarradiation ?? 0;
                     let electricityGenerated = 0;
@@ -60,7 +78,7 @@ class ReportService {
             });
 
             // Calculate the sum of values for each date
-            const sumByDate = Object.entries(data).reduce((acc, [date, values]) => {
+            const sumByDate = Object.entries(weatherData).reduce((acc, [date, values]) => {
                 const sum = values.reduce((total, obj) => total + obj.electricityGenerated, 0);
                 acc[date] = sum;
                 return acc;
@@ -86,6 +104,49 @@ class ReportService {
         const tempFolderPath = os.tmpdir();
         const filePath = path.join(tempFolderPath, fileName);
         return filePath;
+    }
+
+    private generateJSON(product: IProductDetail, weatherData: IReportData): IReportJSON {
+
+        const xAxis: string[] = [];
+        const yAxis: number[] = [];
+
+        try {
+
+            const sortedDatesData = Helpers.sortObjectKeys(weatherData) as IReportData;
+
+            Object.entries(sortedDatesData).forEach(([date, timeValues]) => {
+                Object.values(timeValues).forEach((timeValue) => {
+                    const solarRadiation = timeValue?.solarradiation ?? 0;
+                    let electricityGenerated = 0;
+                    const powerConversionEfficiency = 1;
+                    if (solarRadiation) {
+                        electricityGenerated = electrictyCalculator.calculateElectricityProduced(
+                            solarRadiation,
+                            product.power_peak,
+                            product.orientation,
+                            product.tiltAngle,
+                            product.area,
+                            product.num_panels,
+                            powerConversionEfficiency
+                        );
+                    }
+
+                    xAxis.push(`${date} ${timeValue.datetime}`);
+                    yAxis.push(electricityGenerated);
+                });
+            });
+        }
+        catch {
+
+        }
+
+        const reportJson: IReportJSON = {
+            datetimes: xAxis,
+            electrictyProduced: yAxis,
+        };
+
+        return reportJson;
     }
 }
 
