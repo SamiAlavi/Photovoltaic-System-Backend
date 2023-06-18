@@ -15,7 +15,7 @@ interface ICustomRequest extends Request {
 
 interface IProduct {
     id: string,
-    name: string,
+    model: string,
     company: string,
     area: number,
     power_peak: number,
@@ -31,6 +31,7 @@ interface IProject {
 
 
 interface IProductDetail extends IProduct {
+    name: string,
     orientation: ORIENTATION,
     tiltAngle: number,
     lat: number,
