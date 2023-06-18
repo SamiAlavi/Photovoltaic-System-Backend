@@ -50,6 +50,7 @@ class ElectricityCalculator {
         orientation: string,
         tiltAngle: number,
         areaPerCell: number,
+        numPanels: number,
         powerConversionEfficiency: number
     ): number {
         const adjustedPowerPeak = powerPeak * (solarIrradiance / this.referenceIrradiance); // Adjust power peak based on solar irradiance
@@ -61,6 +62,7 @@ class ElectricityCalculator {
             orientationFactor *
             inclinationFactor *
             areaPerCell *
+            numPanels *
             powerConversionEfficiency;
 
         return electricityProduced;
@@ -72,6 +74,7 @@ class ElectricityCalculator {
         orientation: string,
         tiltAngle: number,
         areaPerCell: number,
+        numPanels: number,
         powerConversionEfficiency: number
     ): number {
         let totalElectricity = 0;
@@ -83,6 +86,7 @@ class ElectricityCalculator {
                 orientation,
                 tiltAngle,
                 areaPerCell,
+                numPanels,
                 powerConversionEfficiency
             );
             totalElectricity += electricityProduced;
@@ -93,4 +97,4 @@ class ElectricityCalculator {
 }
 
 // "Standard Test Conditions" (STC) 1000 W/m2, "Photovoltaic Engineering Reference Cell" (PERC) 800 W/m2
-export default new ElectricityCalculator(100);
+export default new ElectricityCalculator(800);

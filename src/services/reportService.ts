@@ -45,6 +45,7 @@ class ReportService {
                             product.orientation,
                             product.tiltAngle,
                             product.area,
+                            product.num_panels,
                             powerConversionEfficiency
                         );
                     }
