@@ -135,7 +135,7 @@ class ReportService {
                             powerConversionEfficiency
                         );
                     }
-                    electricityGenerated /= 1000;
+                    electricityGenerated /= 1000; //kWh
                     hourlyXAxis.push(`${date} ${timeValue.datetime}`);
                     hourlyYAxis.push(electricityGenerated);
                     dailyElectrictyGenerated += electricityGenerated;
