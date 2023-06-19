@@ -19,22 +19,6 @@ class ReportService {
         return '';
     }
 
-    async generateReportJSON(product: IProductDetail): Promise<IReportJSON> {
-        try {
-            const { lng, lat, region } = product;
-            await weatherService.addLast30DaysDataInRegion(region, lat, lng);
-            const weatherData = await weatherService.getLast30DaysWeatherData(region);
-            return this.generateJSON(product, weatherData);
-        }
-        catch {
-
-        }
-        return {
-            datetimes: [],
-            electrictyProduced: [],
-        };
-    }
-
     private generateCSV(product: IProductDetail, weatherData: IReportData): string {
         try {
 
@@ -106,16 +90,36 @@ class ReportService {
         return filePath;
     }
 
+    async generateReportJSON(product: IProductDetail): Promise<IReportJSON> {
+        try {
+            const { lng, lat, region } = product;
+            await weatherService.addLast30DaysDataInRegion(region, lat, lng);
+            const weatherData = await weatherService.getLast30DaysWeatherData(region);
+            return this.generateJSON(product, weatherData);
+        }
+        catch {
+
+        }
+        const row = {
+            datetimes: [],
+            electrictyProduced: [],
+        };
+        return { hourly: row, daily: row };
+    }
+
     private generateJSON(product: IProductDetail, weatherData: IReportData): IReportJSON {
 
-        const xAxis: string[] = [];
-        const yAxis: number[] = [];
+        const hourlyXAxis: string[] = [];
+        const hourlyYAxis: number[] = [];
+        const dailyXAxis: string[] = [];
+        const dailyYAxis: number[] = [];
 
         try {
 
             const sortedDatesData = Helpers.sortObjectKeys(weatherData) as IReportData;
 
             Object.entries(sortedDatesData).forEach(([date, timeValues]) => {
+                let dailyElectrictyGenerated = 0;
                 Object.values(timeValues).forEach((timeValue) => {
                     const solarRadiation = timeValue?.solarradiation ?? 0;
                     let electricityGenerated = 0;
@@ -131,10 +135,13 @@ class ReportService {
                             powerConversionEfficiency
                         );
                     }
-
-                    xAxis.push(`${date} ${timeValue.datetime}`);
-                    yAxis.push(electricityGenerated);
+                    electricityGenerated /= 1000;
+                    hourlyXAxis.push(`${date} ${timeValue.datetime}`);
+                    hourlyYAxis.push(electricityGenerated);
+                    dailyElectrictyGenerated += electricityGenerated;
                 });
+                dailyXAxis.push(date);
+                dailyYAxis.push(dailyElectrictyGenerated);
             });
         }
         catch {
@@ -142,8 +149,14 @@ class ReportService {
         }
 
         const reportJson: IReportJSON = {
-            datetimes: xAxis,
-            electrictyProduced: yAxis,
+            hourly: {
+                datetimes: hourlyXAxis,
+                electrictyProduced: hourlyYAxis,
+            },
+            daily: {
+                datetimes: dailyXAxis,
+                electrictyProduced: dailyYAxis,
+            }
         };
 
         return reportJson;
