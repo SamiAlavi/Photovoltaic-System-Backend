@@ -31,7 +31,7 @@ const getMappings = (collections: IProjectCollection[]) => {
                 const key = `${lng},${lat}`;
                 const value = region || key;
                 const timeDifference = Math.abs(Date.now() - timestamp);
-                if (timeDifference >= millisecondsPer30Days) {
+                if (product.isActive && timeDifference >= millisecondsPer30Days) {
                     const key = `${userId}~${project.id}`;
                     try {
                         days30Completed[key].push(product);
@@ -54,26 +54,28 @@ const getMappings = (collections: IProjectCollection[]) => {
     return { days30Completed, forwardMap, reverseMap };
 };
 
-const on30daysPassed = async (userUid: string, projectId: string, products: IProductDetail[]) => {
+const on30daysPassed = async (userUid: string, projectId: string, timePassedProducts: IProductDetail[]) => {
     // generate report
     const filePaths = [];
-    for (const product of products) {
-        const { lng, lat, region } = product;
+    for (const timePassedProduct of timePassedProducts) {
+        const { lng, lat, region } = timePassedProduct;
         await weatherService.addLast30DaysDataInRegion(region, lng, lat);
-        const filePath = await reportService.generateReportCSV(product);
+        const filePath = await reportService.generateReportCSV(timePassedProduct);
         filePaths.push(filePath);
     }
     // mail to user
-    await sendEmailToUser(userUid, filePaths, products);
+    await sendEmailToUser(userUid, filePaths, timePassedProducts);
     fileService.deleteFilesSync(filePaths);
 
     // set products, project to readonly
-    for (const product of products) {
+    for (const timePassedProduct of timePassedProducts) {
         const project = await projectService.getProject(userUid, projectId);
         const dbProducts = project.products;
-        const dbProduct = dbProducts.find((prod) => prod.id === product.id);
+        const dbProduct = dbProducts.find((prod) => prod.id === timePassedProduct.id);
         if (dbProduct) {
+            const reportJson = await reportService.generateReportJSON(dbProduct);
             dbProduct.isActive = false;
+            dbProduct.report = reportJson;
             const isProjectActive = dbProducts.some((prod) => prod.isActive);
             project.isActive = isProjectActive;
             await projectService.updateProject(userUid, project);
