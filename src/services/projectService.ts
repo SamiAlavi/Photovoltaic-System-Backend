@@ -83,7 +83,7 @@ class ProjectService {
 
     async generateProductReport(userUid: string, projectId: string, product: IProductDetail): Promise<IReportJSON> {
         const reportJson = await reportService.generateReportJSON(product);
-        const filePath = await reportService.generateReport(product);
+        const filePath = await reportService.generateReportCSV(product);
         const userEmail = await firebaseAuth.getUserEmailFromId(userUid);
         emailService.sendEmail(userEmail, [filePath], [product]);
         product.isActive = false;

@@ -1,3 +1,6 @@
+import * as os from 'os';
+import * as path from 'path';
+
 class Helpers {
     static getQueryParameters(queryParams: {}): string {
         return Object.entries(queryParams).map(([key, value]) => `${key}=${value}`).join("&");
@@ -16,6 +19,12 @@ class Helpers {
         const sortedArray = Object.entries(object).sort();
         const sortedObj = Object.fromEntries(sortedArray);
         return sortedObj;
+    }
+
+    static getTempFilePath(fileName: string) {
+        const tempFolderPath = os.tmpdir();
+        const filePath = path.join(tempFolderPath, fileName);
+        return filePath;
     }
 }
 

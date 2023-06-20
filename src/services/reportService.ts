@@ -1,14 +1,11 @@
-import { report } from "process";
 import Helpers from "../shared/helpers";
 import { IProductDetail, IReportData, IReportJSON } from "../shared/interfaces";
 import electrictyCalculator from "./electrictyCalculator";
 import fileService from "./fileService";
 import weatherService from "./weather/weather";
-import * as os from 'os';
-import * as path from 'path';
 
 class ReportService {
-    async generateReport(product: IProductDetail): Promise<string> {
+    async generateReportCSV(product: IProductDetail): Promise<string> {
         try {
             const weatherData = await weatherService.getLast30DaysWeatherData(product.region);
             return this.generateCSV(product, weatherData);
@@ -23,21 +20,25 @@ class ReportService {
         try {
 
             const csvName = `weather-${product.id}-${Date.now()}.csv`;
-            const csvPath = this.getTempFilePath(csvName);
+            const csvPath = Helpers.getTempFilePath(csvName);
+            const sortedDatesData = Helpers.sortObjectKeys(weatherData) as IReportData;
 
             // Extract all unique datetimes
-            const datetimes = Array.from(new Set(Object.values(weatherData).flatMap((arr) => arr.map((obj) => obj.datetime))));
+            const datetimes = Array.from(new Set(Object.values(sortedDatesData).flatMap((arr) => arr.map((obj) => obj.datetime))));
 
             // Prepare the CSV header row
-            const dates = Object.keys(weatherData);
+            const dates = Object.keys(sortedDatesData);
             const csvHeaderRow = ['Time\\Date', ...dates].join(',');
 
             // Prepare the CSV data rows
             const csvDataRows = datetimes.map((datetime) => {
                 const rowData = [datetime];
-                const rowDataByDate = Object.entries(weatherData).reduce((acc, [date, values]) => {
-                    const entry = values.find((obj) => obj.datetime === datetime);
-                    const solarRadiation = entry?.solarradiation ?? 0;
+                const rowDataByDate = Object.entries(sortedDatesData).reduce((acc, [date, values]) => {
+                    const dateTimeEntry = values.find((obj) => obj.datetime === datetime) ?? {
+                        datetime: datetime,
+                        solarradiation: 0,
+                    };
+                    const solarRadiation = dateTimeEntry.solarradiation ?? 0;
                     let electricityGenerated = 0;
                     const powerConversionEfficiency = 1;
                     if (solarRadiation) {
@@ -49,9 +50,9 @@ class ReportService {
                             product.area,
                             product.num_panels,
                             powerConversionEfficiency
-                        );
+                        ) / 1000; // units kWh
                     }
-                    entry.electricityGenerated = electricityGenerated;
+                    dateTimeEntry.electricityGenerated = electricityGenerated;
                     acc[date] = electricityGenerated;
                     return acc;
                 }, {});
@@ -62,14 +63,14 @@ class ReportService {
             });
 
             // Calculate the sum of values for each date
-            const sumByDate = Object.entries(weatherData).reduce((acc, [date, values]) => {
+            const sumByDate = Object.entries(sortedDatesData).reduce((acc, [date, values]) => {
                 const sum = values.reduce((total, obj) => total + obj.electricityGenerated, 0);
                 acc[date] = sum;
                 return acc;
             }, {});
 
             // Prepare the row with the sums for each date
-            const sumRow = ['TOTAL', ...dates.map((date) => sumByDate[date])].join(',');
+            const sumRow = ['TOTAL (kWh)', ...dates.map((date) => sumByDate[date])].join(',');
 
             // Combine header, data, sum rows
             const csvContent = [csvHeaderRow, ...csvDataRows, sumRow].join('\n');
@@ -80,14 +81,10 @@ class ReportService {
 
             return csvPath;
         }
-        catch { }
+        catch (error: any) {
+            console.error(error);
+        }
         return '';
-    }
-
-    private getTempFilePath(fileName: string) {
-        const tempFolderPath = os.tmpdir();
-        const filePath = path.join(tempFolderPath, fileName);
-        return filePath;
     }
 
     async generateReportJSON(product: IProductDetail): Promise<IReportJSON> {

@@ -10,8 +10,8 @@ const environment = {
     APIKEY_WEATHERBIT: process.env.APIKEY_WEATHERBIT ?? "55a3337671724cbf90c3060894640919",
     APIKEY_VISUALCROSSING: process.env.APIKEY_VISUALCROSSING ?? "B3BE35ZP5FNMLRQNHNFEEK2A8",
     APIKEY_ACCUWEATHER: process.env.APIKEY_ACCUWEATHER ?? "AFhfDyUloVSF2aGHeWa7ebxpcy36dft6",
-    APIKEY_SENDGRID: process.env.APIKEY_SENDGRID ?? "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",
-    SENDGRID_VERIFIEDSENDER: process.env.SENDGRID_VERIFIEDSENDER ?? "meyditutri@gufum.com",
+    APIKEY_SENDGRID: process.env.APIKEY_SENDGRID ?? "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",
+    SENDGRID_VERIFIEDSENDER: process.env.SENDGRID_VERIFIEDSENDER ?? "sami.mansooralavi99@gmail.com",
     SESSION_SECRET: process.env.SESSION_SECRET ?? "TTKqn+G8LU4D@^79vx23kJ7$=$@hk@qE_L^Us*4GLza@YHG*Ga7Nf8ng_j%-u&cF!nxV=2?HF6S%bGGfCkxR+3v75GH6r2M&AJXs",
     SESSION_TIMEOUT: parseInt(process.env.SESSION_TIMEOUT ?? "604800000"), // 1 week (in ms)
 };

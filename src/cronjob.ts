@@ -60,7 +60,7 @@ const on30daysPassed = async (userUid: string, projectId: string, products: IPro
     for (const product of products) {
         const { lng, lat, region } = product;
         await weatherService.addLast30DaysDataInRegion(region, lng, lat);
-        const filePath = await reportService.generateReport(product);
+        const filePath = await reportService.generateReportCSV(product);
         filePaths.push(filePath);
     }
     // mail to user
