@@ -20,6 +20,7 @@ interface IProduct {
     area: number,
     power_peak: number,
     num_cells: string,
+    efficiency: number,
 }
 
 interface IProject {

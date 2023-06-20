@@ -40,16 +40,15 @@ class ReportService {
                     };
                     const solarRadiation = dateTimeEntry.solarradiation ?? 0;
                     let electricityGenerated = 0;
-                    const powerConversionEfficiency = 1;
                     if (solarRadiation) {
                         electricityGenerated = electrictyCalculator.calculateElectricityProduced(
                             solarRadiation,
-                            product.power_peak,
+                            product.power_peak, // W
                             product.orientation,
                             product.tiltAngle,
-                            product.area,
+                            product.area, // m^2
                             product.num_panels,
-                            powerConversionEfficiency
+                            product.efficiency,
                         ) / 1000; // units kWh
                     }
                     dateTimeEntry.electricityGenerated = electricityGenerated;
