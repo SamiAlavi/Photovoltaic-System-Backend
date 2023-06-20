@@ -27,7 +27,7 @@ class EmailService {
             const filePath = filePaths[i];
             if (filePath) {
                 const product = products[i];
-                const fileName = `Report-${product.name}(${product.id}).csv`;
+                const fileName = `Report_${product.name}_${product.id}.csv`;
                 attachments.push({
                     content: fileService.readFileSyncBase64(filePath),
                     filename: fileName,

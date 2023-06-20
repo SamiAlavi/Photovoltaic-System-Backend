@@ -20,7 +20,7 @@ class Weather {
 
     async addLast30DaysDataInRegion(region: string, longitiude: number, latitude: number): Promise<void> {
         const date = new Date();
-        const last30days = 1;
+        const last30days = 30;
         const step = 1;
         for (let i = 1; i <= last30days; i++) {
             date.setDate(date.getDate() - step);
