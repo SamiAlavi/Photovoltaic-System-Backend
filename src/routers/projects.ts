@@ -1,100 +1,92 @@
 import { Router, Response } from 'express';
 import projectService from "../services/projectService";
 import AppSettings from '../../AppSettings';
-import { IAddProductRequest, ICustomRequest, IProductDetail, IProject } from '../shared/interfaces';
+import { ICustomRequest, IProductAddRequest, IProductDeleteRequest, IProductUpdateRequest, IProjectCreateRequest, IProjectDeleteRequest } from '../shared/requestsInterfaces';
+import Helpers from '../shared/helpers';
 
 const router = Router();
 
 router.get(AppSettings.RouteBase, async (req: ICustomRequest, res: Response) => {
     try {
-        const projects = await projectService.getProjects(req.userUid);
+        const userUid = req.userUid;
+        const projects = await projectService.getProjects(userUid);
         res.send(projects);
     }
     catch (error: any) {
-        handleError(res, error);
+        Helpers.handleError(res, error);
     }
 });
 
-router.get(AppSettings.RouteId, async (req: ICustomRequest, res: Response) => {
+router.post(AppSettings.RouteBase, async (req: IProjectCreateRequest, res: Response) => {
     try {
-        const projectId = decodeURIComponent(req.params.id);
-        const project = await projectService.getProject(req.userUid, projectId);
-        res.send(project);
-    }
-    catch (error: any) {
-        handleError(res, error);
-    }
-});
-
-router.post(AppSettings.RouteBase, async (req: ICustomRequest, res: Response) => {
-    try {
-        const projectId: string = req.body.projectId;
-        const project = projectService.createProject(req.userUid, projectId);
+        const userUid = req.userUid;
+        const { projectId } = req.body;
+        const project = projectService.createProject(userUid, projectId);
         res.status(201).send(project);
     }
     catch (error: any) {
-        handleError(res, error);
+        Helpers.handleError(res, error);
     }
 });
-router.delete(AppSettings.RouteBase, async (req: ICustomRequest, res: Response) => {
+
+router.delete(AppSettings.RouteBase, async (req: IProjectDeleteRequest, res: Response) => {
     try {
-        const projectId: string = req.body.projectId;
-        projectService.deleteProject(req.userUid, projectId);
+        const userUid = req.userUid;
+        const { projectId } = req.body;
+        projectService.deleteProject(userUid, projectId);
         res.status(204).send(true);
     }
     catch (error: any) {
-        handleError(res, error);
+        Helpers.handleError(res, error);
     }
 });
 
-router.post(AppSettings.RouteAddEditDeleteProduct, async (req: ICustomRequest, res: Response) => {
+router.post(AppSettings.RouteAddEditDeleteProduct, async (req: IProductAddRequest, res: Response) => {
     try {
-        const { projectId, product } = req.body as IAddProductRequest;
-        projectService.addProductInProject(req.userUid, projectId, product);
+        const userUid = req.userUid;
+        const { projectId, product } = req.body;
+        projectService.addProductInProject(userUid, projectId, product);
         res.status(201).send({});
     }
     catch (error: any) {
-        handleError(res, error);
+        Helpers.handleError(res, error);
     }
 });
 
-router.put(AppSettings.RouteAddEditDeleteProduct, async (req: ICustomRequest, res: Response) => {
+router.put(AppSettings.RouteAddEditDeleteProduct, async (req: IProductUpdateRequest, res: Response) => {
     try {
-        const { projectId, product } = req.body as IAddProductRequest;
-        projectService.editProductInProject(req.userUid, projectId, product);
+        const userUid = req.userUid;
+        const { projectId, product } = req.body;
+        projectService.editProductInProject(userUid, projectId, product);
         res.status(204).send({});
     }
     catch (error: any) {
-        handleError(res, error);
+        Helpers.handleError(res, error);
     }
 });
 
-router.delete(AppSettings.RouteAddEditDeleteProduct, async (req: ICustomRequest, res: Response) => {
+router.delete(AppSettings.RouteAddEditDeleteProduct, async (req: IProductDeleteRequest, res: Response) => {
     try {
-        const { projectId, product } = req.body as IAddProductRequest;
-        projectService.deleteProductInProject(req.userUid, projectId, product);
+        const userUid = req.userUid;
+        const { projectId, product } = req.body;
+        projectService.deleteProductInProject(userUid, projectId, product);
         res.status(204).send({});
     }
     catch (error: any) {
-        handleError(res, error);
+        Helpers.handleError(res, error);
     }
 });
 
 router.post(AppSettings.RouteProductReport, async (req: ICustomRequest, res: Response) => {
     try {
-        const { projectId, product } = req.body as IAddProductRequest;
-        const reportData = await projectService.generateProductReport(req.userUid, projectId, product);
+        const userUid = req.userUid;
+        const { projectId, product } = req.body;
+        const reportData = await projectService.generateProductReport(userUid, projectId, product);
         res.status(200).send(reportData);
     }
     catch (error: any) {
-        handleError(res, error);
+        Helpers.handleError(res, error);
     }
 });
-
-function handleError(res: Response, error: Error) {
-    res.status(400).send({
-        message: error.message,
-    });
-}
 
 export default router;

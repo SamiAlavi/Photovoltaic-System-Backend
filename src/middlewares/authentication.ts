@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import environment from "../../env";
 import sessionManager from "../services/sessionManager";
-import { ICustomRequest, ICustomUserRecord } from "../shared/interfaces";
+import { ICustomUserRecord } from "../shared/interfaces";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
 import AppSettings from "../../AppSettings";
+import { ICustomRequest } from "../shared/requestsInterfaces";
 
 const secret = environment.SESSION_SECRET;
 const skipPaths = [AppSettings.RouteSignin, AppSettings.RouteSignup]

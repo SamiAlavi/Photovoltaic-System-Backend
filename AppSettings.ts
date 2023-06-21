@@ -5,7 +5,7 @@ class AppSettings {
     static Report = "/report";
 
     static RouteBase = "/";
-    static RouteId = `${this.RouteBase}:id`;
+    static RouteSwagger = "/api-docs";
     static RouteApi = `/api`;
     static RouteSignup = `/signup`;
     static RouteSignin = `/signin`;

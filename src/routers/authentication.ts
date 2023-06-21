@@ -1,18 +1,19 @@
-import { Router, Request, Response } from 'express';
+import { Router, Response } from 'express';
 import firebaseAuth from '../services/firebase/firebaseAuth';
 import { Mapper } from '../shared/mappers';
 import environment from '../../env';
 import sessionManagerService from '../services/sessionManager';
 import projectService from "../services/projectService";
 import AppSettings from '../../AppSettings';
-import { ICustomRequest } from '../shared/interfaces';
+import { ICustomRequest, IProfileDeleteRequest, IProfileUpdateRequest, ISigninRequest, ISignupRequest } from '../shared/requestsInterfaces';
+import Helpers from '../shared/helpers';
 const jwt = require('jsonwebtoken');
 
 const router = Router();
 const secret = environment.SESSION_SECRET;
 const expiry = { expiresIn: `${environment.SESSION_TIMEOUT}ms` };
 
-router.post(AppSettings.RouteSignup, async (req: Request, res: Response) => {
+router.post(AppSettings.RouteSignup, async (req: ISignupRequest, res: Response) => {
     try {
         const { email, password } = req.body;
         const user = await firebaseAuth.createEmailPasswordBasedAccount(email, password);
@@ -22,11 +23,11 @@ router.post(AppSettings.RouteSignup, async (req: Request, res: Response) => {
     }
     catch (error: any) {
         // console.error('Error creating new user:', error);
-        handleError(res, error);
+        Helpers.handleError(res, error);
     }
 });
 
-router.post(AppSettings.RouteSignin, async (req: Request, res: Response) => {
+router.post(AppSettings.RouteSignin, async (req: ISigninRequest, res: Response) => {
     try {
         const { email, password } = req.body;
         const user = await firebaseAuth.loginEmailPasswordBasedAccount(email, password);
@@ -37,22 +38,23 @@ router.post(AppSettings.RouteSignin, async (req: Request, res: Response) => {
         res.send(userRecord);
     }
     catch (error: any) {
-        // console.error('Error logging in:', error);
-        handleError(res, error);
+        Helpers.handleError(res, error);
     }
 });
 
 
 router.delete(AppSettings.RouteSignout, async (req: ICustomRequest, res: Response) => {
     try {
-        sessionManagerService.deleteSession(req.userUid);
+        const userUid = req.userUid;
+        sessionManagerService.deleteSession(userUid);
+        res.sendStatus(204);
     }
-    catch {
+    catch (error: any) {
+        Helpers.handleError(res, error);
     }
-    res.sendStatus(204);
 });
 
-router.post(AppSettings.Profile, async (req: ICustomRequest, res: Response) => {
+router.post(AppSettings.Profile, async (req: IProfileUpdateRequest, res: Response) => {
     try {
         const userUid = req.userUid;
         const { email, currentPassword, newPassword } = req.body;
@@ -60,30 +62,22 @@ router.post(AppSettings.Profile, async (req: ICustomRequest, res: Response) => {
         res.status(200).send({});
     }
     catch (error: any) {
-        handleError(res, error);
+        Helpers.handleError(res, error);
     }
 });
 
-router.delete(AppSettings.Profile, async (req: ICustomRequest, res: Response) => {
+router.delete(AppSettings.Profile, async (req: IProfileDeleteRequest, res: Response) => {
     try {
         const userUid = req.userUid;
         const { email, currentPassword } = req.body;
-        await firebaseAuth.deleteUser(userUid, email, currentPassword);
+        await firebaseAuth.deleteUser(userUid, email);
         await sessionManagerService.deleteSession(userUid);
         await projectService.deleteAllProjects(userUid);
         res.status(204).send({});
     }
     catch (error: any) {
-        handleError(res, error);
+        Helpers.handleError(res, error);
     }
 });
-
-
-
-function handleError(res: Response, error: Error) {
-    res.status(400).send({
-        message: error.message,
-    });
-}
 
 export default router;

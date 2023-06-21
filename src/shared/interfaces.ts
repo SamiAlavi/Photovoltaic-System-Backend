@@ -1,16 +1,11 @@
-import { Request } from 'express';
 import { ORIENTATION } from './enums';
-import { CurrentConditions, IVisualCrossingDailyForecastData } from '../services/weather/interface-visualCrossing';
+import { CurrentConditions } from '../services/weather/interface-visualCrossing';
 
 interface ICustomUserRecord {
     uid: string,
     email: string,
     accessToken?: string,
     exp?: number,
-}
-
-interface ICustomRequest extends Request {
-    userUid: string,
 }
 
 interface IProduct {
@@ -49,11 +44,6 @@ interface IProjectCollection {
     documents: IProject[],
 }
 
-interface IAddProductRequest {
-    projectId: string,
-    product: IProductDetail,
-}
-
 interface IWeatherData {
     [key: string]: CurrentConditions[];
 }
@@ -81,12 +71,10 @@ interface IReportJSON {
 
 export {
     ICustomUserRecord,
-    ICustomRequest,
     IProject,
     IProduct,
     IProductDetail,
     IProjectCollection,
-    IAddProductRequest,
     IWeatherData,
     IReportDataRow,
     IReportData,

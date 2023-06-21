@@ -1,5 +1,6 @@
 import * as os from 'os';
 import * as path from 'path';
+import { Response } from 'express';
 
 class Helpers {
     static getQueryParameters(queryParams: {}): string {
@@ -26,6 +27,13 @@ class Helpers {
         const filePath = path.join(tempFolderPath, fileName);
         return filePath;
     }
+
+    static handleError(res: Response, error: Error) {
+        res.status(400).send({
+            message: error.message,
+        });
+    }
+
 }
 
 export default Helpers;
