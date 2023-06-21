@@ -2,9 +2,10 @@
     "main": "index.js",
     "name": "photovoltaic-system-backend",
     "scripts": {
+        "init": "ts-node initScript.ts",
         "start": "nodemon index.ts",
         "build": "npx tsc",
-        "test": "ts-node test.ts "
+        "test": "ts-node test.ts,"
     },
     "dependencies": {
         "@sendgrid/mail": "^7.7.0",
