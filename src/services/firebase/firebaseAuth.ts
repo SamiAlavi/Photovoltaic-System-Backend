@@ -1,5 +1,6 @@
 import { firebaseAdminApp, firebaseApp } from './firebase';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, User } from "firebase/auth";
+import { UpdateRequest } from 'firebase-admin/lib/auth/auth-config';
 
 class FirebaseAuth {
     private auth = getAuth(firebaseApp);
@@ -38,9 +39,10 @@ class FirebaseAuth {
     async updateUserPassword(userUid: string, email: string, currentPassword: string, newPassword: string) {
         await this.verifyUserEmail(userUid, email);
         await this.loginEmailPasswordBasedAccount(email, currentPassword);
-        await this.adminAuth.updateUser(userUid, {
+        const properties: UpdateRequest = {
             password: newPassword,
-        });
+        };
+        await this.adminAuth.updateUser(userUid, properties);
 
         console.log('Password updated successfully.');
     }

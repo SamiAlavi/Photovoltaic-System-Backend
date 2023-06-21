@@ -3,7 +3,6 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import environment from './env';
 import './src/cronjob';
-import { ICustomRequest } from './src/shared/interfaces';
 import AppSettings from './AppSettings';
 
 // Middlewares
@@ -39,10 +38,6 @@ app.get(AppSettings.RouteBase, (req: Request, res: Response) => {
 app.use(AppSettings.RouteApi, authenticationRoute);
 app.use(AppSettings.RouteProject, projectRoute);
 app.use(AppSettings.RouteProduct, productRoute);
-
-app.get('/test', (req: ICustomRequest, res: Response) => {
-    res.send("Test");
-});
 
 app.listen(port, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
