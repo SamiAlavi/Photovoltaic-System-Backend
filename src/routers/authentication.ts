@@ -7,13 +7,14 @@ import projectService from "../services/projectService";
 import AppSettings from '../../AppSettings';
 import { ICustomRequest, IProfileDeleteRequest, IProfileUpdateRequest, ISigninRequest, ISignupRequest } from '../shared/requestsInterfaces';
 import Helpers from '../shared/helpers';
+import { ISignupResponse, ISigninResponse, IProfileDeleteResponse } from '../shared/responsesInterfaces';
 const jwt = require('jsonwebtoken');
 
 const router = Router();
 const secret = environment.SESSION_SECRET;
 const expiry = { expiresIn: `${environment.SESSION_TIMEOUT}ms` };
 
-router.post(AppSettings.RouteSignup, async (req: ISignupRequest, res: Response) => {
+router.post(AppSettings.RouteSignup, async (req: ISignupRequest, res: ISignupResponse) => {
     try {
         const { email, password } = req.body;
         const user = await firebaseAuth.createEmailPasswordBasedAccount(email, password);
@@ -27,7 +28,7 @@ router.post(AppSettings.RouteSignup, async (req: ISignupRequest, res: Response) 
     }
 });
 
-router.post(AppSettings.RouteSignin, async (req: ISigninRequest, res: Response) => {
+router.post(AppSettings.RouteSignin, async (req: ISigninRequest, res: ISigninResponse) => {
     try {
         const { email, password } = req.body;
         const user = await firebaseAuth.loginEmailPasswordBasedAccount(email, password);
@@ -54,26 +55,26 @@ router.delete(AppSettings.RouteSignout, async (req: ICustomRequest, res: Respons
     }
 });
 
-router.post(AppSettings.Profile, async (req: IProfileUpdateRequest, res: Response) => {
+router.put(AppSettings.Profile, async (req: IProfileUpdateRequest, res: Response) => {
     try {
         const userUid = req.userUid;
         const { email, currentPassword, newPassword } = req.body;
         await firebaseAuth.updateUserPassword(userUid, email, currentPassword, newPassword);
-        res.status(200).send({});
+        res.status(200).send({ message: 'Success' });
     }
     catch (error: any) {
         Helpers.handleError(res, error);
     }
 });
 
-router.delete(AppSettings.Profile, async (req: IProfileDeleteRequest, res: Response) => {
+router.delete(AppSettings.Profile, async (req: IProfileDeleteRequest, res: IProfileDeleteResponse) => {
     try {
         const userUid = req.userUid;
         const { email, currentPassword } = req.body;
         await firebaseAuth.deleteUser(userUid, email);
         await sessionManagerService.deleteSession(userUid);
         await projectService.deleteAllProjects(userUid);
-        res.status(204).send({});
+        res.status(204).send({ message: "Success" });
     }
     catch (error: any) {
         Helpers.handleError(res, error);

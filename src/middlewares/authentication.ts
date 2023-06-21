@@ -1,17 +1,18 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction } from "express";
 import environment from "../../env";
 import sessionManager from "../services/sessionManager";
 import { ICustomUserRecord } from "../shared/interfaces";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
 import AppSettings from "../../AppSettings";
 import { ICustomRequest } from "../shared/requestsInterfaces";
+import { IErrorResponse } from "../shared/responsesInterfaces";
 
 const secret = environment.SESSION_SECRET;
 const skipPaths = [AppSettings.RouteSignin, AppSettings.RouteSignup]
     .map((route) => `${AppSettings.RouteApi}${route}`);
 
 // Firebase Authentication middleware
-const authenticate = async (req: ICustomRequest, res: Response, next: NextFunction) => {
+const authenticate = async (req: ICustomRequest, res: IErrorResponse, next: NextFunction) => {
     if (skipPaths.includes(req.path)) {
         next();
         return;
