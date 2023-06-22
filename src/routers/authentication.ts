@@ -5,7 +5,7 @@ import environment from '../../env';
 import sessionManagerService from '../services/sessionManager';
 import projectService from "../services/projectService";
 import AppSettings from '../../AppSettings';
-import { ICustomRequest, IProfileDeleteRequest, IProfileUpdateRequest, ISigninRequest, ISignupRequest } from '../shared/requestsInterfaces';
+import { ICustomRequest, IProfileUpdateRequest, ISigninRequest, ISignupRequest } from '../shared/requestsInterfaces';
 import Helpers from '../shared/helpers';
 import { ISignupResponse, ISigninResponse, IProfileDeleteResponse, ISignoutResponse, IProfileUpdateResponse } from '../shared/responsesInterfaces';
 const jwt = require('jsonwebtoken');
@@ -13,6 +13,27 @@ const jwt = require('jsonwebtoken');
 const router = Router();
 const secret = environment.SESSION_SECRET;
 const expiry = { expiresIn: `${environment.SESSION_TIMEOUT}ms` };
+
+/**
+ * @swagger
+ * paths:
+ *   /signup:
+ *     post:
+ *       summary: User signup route
+ *       description: Route for creating a new user account.
+ *       tags:
+ *         - Authentication
+ *       requestBody:
+ *         description: User credentials
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/IUserCredentials'
+ *       responses:
+ *         '200':
+ *           description: User signup successful
+ */
 
 router.post(AppSettings.RouteSignup, async (req: ISignupRequest, res: ISignupResponse) => {
     try {
@@ -28,6 +49,28 @@ router.post(AppSettings.RouteSignup, async (req: ISignupRequest, res: ISignupRes
     }
 });
 
+/**
+ * @swagger
+ * paths:
+ *   /signin:
+ *     post:
+ *       summary: Sign in
+ *       tags:
+ *         - Authentication
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ISigninRequest'
+ *       responses:
+ *         '200':
+ *           description: Successful sign in
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/ISigninResponse'
+ */
 router.post(AppSettings.RouteSignin, async (req: ISigninRequest, res: ISigninResponse) => {
     try {
         const { email, password } = req.body;
@@ -43,7 +86,22 @@ router.post(AppSettings.RouteSignin, async (req: ISigninRequest, res: ISigninRes
     }
 });
 
-
+/**
+ * @swagger
+ * paths:
+ *   /signout:
+ *     delete:
+ *       summary: Sign out
+ *       tags:
+ *         - Authentication
+ *       responses:
+ *         '200':
+ *           description: Successful sign out
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/ISignoutResponse'
+ */
 router.delete(AppSettings.RouteSignout, async (req: ICustomRequest, res: ISignoutResponse) => {
     try {
         const userUid = req.userUid;
@@ -55,6 +113,30 @@ router.delete(AppSettings.RouteSignout, async (req: ICustomRequest, res: ISignou
     }
 });
 
+/**
+ * @swagger
+ * paths:
+ *   /profile:
+ *     put:
+ *       summary: Update profile
+ *       tags:
+ *         - Profile
+ *       security:
+ *         - BearerAuth: []
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/IProfileUpdateRequest'
+ *       responses:
+ *         '200':
+ *           description: Profile updated successfully
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/IProfileUpdateResponse'
+ */
 router.put(AppSettings.Profile, async (req: IProfileUpdateRequest, res: IProfileUpdateResponse) => {
     try {
         const userUid = req.userUid;
@@ -66,7 +148,30 @@ router.put(AppSettings.Profile, async (req: IProfileUpdateRequest, res: IProfile
         Helpers.handleError(res, error);
     }
 });
-
+/**
+ * @swagger
+ * paths:
+ *   /profile:
+ *     delete:
+ *       summary: Delete profile
+ *       tags:
+ *         - Profile
+ *       security:
+ *         - BearerAuth: []
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/IProfileDeleteRequest'
+ *       responses:
+ *         '200':
+ *           description: Profile deleted successfully
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/IProfileDeleteResponse'
+ */
 router.delete(AppSettings.Profile, async (req: ICustomRequest, res: IProfileDeleteResponse) => {
     try {
         const userUid = req.userUid;
