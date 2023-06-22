@@ -29,7 +29,7 @@ class Helpers {
     }
 
     static handleError(res: Response, error: Error) {
-        res.status(400).send({
+        res.status(400).json({
             message: error.message,
         });
     }

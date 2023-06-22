@@ -8,8 +8,11 @@ import { ICustomRequest } from "../shared/requestsInterfaces";
 import { IErrorResponse } from "../shared/responsesInterfaces";
 
 const secret = environment.SESSION_SECRET;
-const skipPaths = [AppSettings.RouteSignin, AppSettings.RouteSignup]
-    .map((route) => `${AppSettings.RouteApi}${route}`);
+const skipPaths = [
+    AppSettings.RouteBase,
+    `${AppSettings.RouteApi}${AppSettings.RouteSignin}`,
+    `${AppSettings.RouteApi}${AppSettings.RouteSignup}`
+];
 
 // Firebase Authentication middleware
 const authenticate = async (req: ICustomRequest, res: IErrorResponse, next: NextFunction) => {

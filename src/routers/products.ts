@@ -9,7 +9,7 @@ const router = Router();
 router.get(AppSettings.RouteBase, async (req: Request, res: IProductsGetResponse) => {
     try {
         const projects = await productService.getProducts();
-        res.send(projects);
+        res.json(projects);
     }
     catch (error: any) {
         Helpers.handleError(res, error);

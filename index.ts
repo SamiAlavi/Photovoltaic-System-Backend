@@ -32,7 +32,7 @@ if (!isProduction) {
 }
 
 app.get(AppSettings.RouteBase, (req: Request, res: Response) => {
-    res.send('Express + TypeScript Server');
+    res.json('Express + TypeScript Server');
 });
 
 app.use(AppSettings.RouteApi, authenticationRoute);

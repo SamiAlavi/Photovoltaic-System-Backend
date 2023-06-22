@@ -9,11 +9,16 @@ interface ExtendedResponse<T> extends Response {
 interface IErrorResponse extends ExtendedResponse<{ message: string; }> { };
 
 interface ISuccessResponse extends ExtendedResponse<{ message: "Success"; }> { };
+
 interface IBooleanResponse extends ExtendedResponse<boolean> { };
 
 interface ISignupResponse extends ExtendedResponse<ICustomUserRecord> { };
 
 interface ISigninResponse extends ISignupResponse { };
+
+interface ISignoutResponse extends ISuccessResponse { };
+
+interface IProfileUpdateResponse extends ISuccessResponse { };
 
 interface IProfileDeleteResponse extends ISuccessResponse { };
 
@@ -33,9 +38,11 @@ interface IProductDeleteResponse extends ISuccessResponse { };
 
 export {
     IErrorResponse,
+    IProfileUpdateResponse,
     IProfileDeleteResponse,
     ISignupResponse,
     ISigninResponse,
+    ISignoutResponse,
     IProductsGetResponse,
     IProjectsGetResponse,
     IProjectCreateResponse,
