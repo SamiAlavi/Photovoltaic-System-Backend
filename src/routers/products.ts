@@ -9,7 +9,7 @@ const router = Router();
 /**
  * @swagger
  * paths:
- *   /:
+ *   /product:
  *     get:
  *       summary: Get products
  *       tags:

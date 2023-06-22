@@ -10,7 +10,7 @@ const router = Router();
 /**
  * @swagger
  * paths:
- *   /:
+ *   /project:
  *     get:
  *       summary: Get user projects
  *       tags:
@@ -39,7 +39,7 @@ router.get(AppSettings.RouteBase, async (req: ICustomRequest, res: IProjectsGetR
 /**
  * @swagger
  * paths:
- *   /:
+ *   /project:
  *     post:
  *       summary: Create project
  *       tags:
@@ -75,7 +75,7 @@ router.post(AppSettings.RouteBase, async (req: IProjectCreateRequest, res: IProj
 /**
  * @swagger
  * paths:
- *   /:
+ *   /project:
  *     delete:
  *       summary: Delete project
  *       tags:
@@ -111,7 +111,7 @@ router.delete(AppSettings.RouteBase, async (req: IProjectDeleteRequest, res: IPr
 /**
  * @swagger
  * paths:
- *   /product:
+ *   /project/product:
  *     post:
  *       summary: Add product
  *       tags:
@@ -147,7 +147,7 @@ router.post(AppSettings.RouteAddEditDeleteProduct, async (req: IProductAddReques
 /**
  * @swagger
  * paths:
- *   /product:
+ *   /project/product:
  *     put:
  *       summary: Edit product
  *       tags:
@@ -183,7 +183,7 @@ router.put(AppSettings.RouteAddEditDeleteProduct, async (req: IProductUpdateRequ
 /**
  * @swagger
  * paths:
- *   /product:
+ *   /project/product:
  *     delete:
  *       summary: Delete product
  *       tags:
@@ -219,7 +219,7 @@ router.delete(AppSettings.RouteAddEditDeleteProduct, async (req: IProductDeleteR
 /**
  * @swagger
  * paths:
- *   /product/report:
+ *   /project/product/report:
  *     post:
  *       summary: Generate product report
  *       tags:
