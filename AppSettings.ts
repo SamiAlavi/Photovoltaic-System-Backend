@@ -1,11 +1,14 @@
 class AppSettings {
+    static FavIconIco = "/favicon.ico";
     static Project = "/project";
     static Product = "/product";
     static Profile = "/profile";
     static Report = "/report";
+    static SwaggerJSON = "/swagger.json";
 
     static RouteBase = "/";
     static RouteSwagger = "/api-docs";
+    static RouteSwaggerJSON = `${this.RouteSwagger}${this.SwaggerJSON}`;
     static RouteApi = `/api`;
     static RouteSignup = `/signup`;
     static RouteSignin = `/signin`;

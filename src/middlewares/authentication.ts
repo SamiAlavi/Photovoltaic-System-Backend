@@ -8,24 +8,29 @@ import { ICustomRequest } from "../shared/requestsInterfaces";
 import { IErrorResponse } from "../shared/responsesInterfaces";
 
 const secret = environment.SESSION_SECRET;
+
 const skipPaths = [
     AppSettings.RouteBase,
+    AppSettings.RouteSwagger,
+    AppSettings.RouteSwaggerJSON,
     `${AppSettings.RouteApi}${AppSettings.RouteSignin}`,
     `${AppSettings.RouteApi}${AppSettings.RouteSignup}`
 ];
 
 // Firebase Authentication middleware
 const authenticate = async (req: ICustomRequest, res: IErrorResponse, next: NextFunction) => {
-    if (skipPaths.includes(req.path)) {
+    const reqPath = req.path;
+    if (skipPaths.includes(reqPath) || reqPath.startsWith(AppSettings.RouteSwagger)) {
         next();
         return;
     }
     // Extract the JWT token from the request headers or cookies
-    const token = req.headers.authorization?.split(' ').at(-1) ?? "";
-    const userUid = req.headers['x-uid'] as string;
+    const reqHeaders = req.headers;
+    const token = reqHeaders.authorization?.split(' ').at(-1) ?? "";
+    const userUid = reqHeaders['x-uid'] as string;
 
     req.userUid = userUid;
-    if (req.path === `${AppSettings.RouteApi}${AppSettings.RouteSignout}`) {
+    if (reqPath === `${AppSettings.RouteApi}${AppSettings.RouteSignout}`) {
         next();
         return;
     }

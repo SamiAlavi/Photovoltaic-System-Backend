@@ -11,7 +11,7 @@ import authentication from './src/middlewares/authentication';
 import errorHandler from './src/middlewares/errorHandler';
 
 // Routers
-import swaggerRoute from './src/routers/swaggerRoute';
+import swaggerRoute from './src/swagger/swaggerRoute';
 import authenticationRoute from './src/routers/authentication';
 import projectRoute from './src/routers/projects';
 import productRoute from './src/routers/products';
