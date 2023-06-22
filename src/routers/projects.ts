@@ -1,9 +1,9 @@
 import { Router, Response } from 'express';
 import projectService from "../services/projectService";
 import AppSettings from '../../AppSettings';
-import { ICustomRequest, IProductAddRequest, IProductDeleteRequest, IProductUpdateRequest, IProjectCreateRequest, IProjectDeleteRequest } from '../shared/requestsInterfaces';
+import { ICustomRequest, IProductAddRequest, IProductDeleteRequest, IProductReportGenerateRequest, IProductUpdateRequest, IProjectCreateRequest, IProjectDeleteRequest } from '../shared/requestsInterfaces';
 import Helpers from '../shared/helpers';
-import { IProductAddResponse, IProductDeleteResponse, IProductUpdateResponse, IProjectCreateResponse, IProjectDeleteResponse, IProjectsGetResponse } from '../shared/responsesInterfaces';
+import { IProductAddResponse, IProductDeleteResponse, IProductReportGenerateResponse, IProductUpdateResponse, IProjectCreateResponse, IProjectDeleteResponse, IProjectsGetResponse } from '../shared/responsesInterfaces';
 
 const router = Router();
 
@@ -78,7 +78,7 @@ router.delete(AppSettings.RouteAddEditDeleteProduct, async (req: IProductDeleteR
     }
 });
 
-router.post(AppSettings.RouteProductReport, async (req: ICustomRequest, res: Response) => {
+router.post(AppSettings.RouteProductReport, async (req: IProductReportGenerateRequest, res: IProductReportGenerateResponse) => {
     try {
         const userUid = req.userUid;
         const { projectId, product } = req.body;

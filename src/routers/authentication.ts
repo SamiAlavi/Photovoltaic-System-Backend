@@ -67,11 +67,11 @@ router.put(AppSettings.Profile, async (req: IProfileUpdateRequest, res: IProfile
     }
 });
 
-router.delete(AppSettings.Profile, async (req: IProfileDeleteRequest, res: IProfileDeleteResponse) => {
+router.delete(AppSettings.Profile, async (req: ICustomRequest, res: IProfileDeleteResponse) => {
     try {
         const userUid = req.userUid;
-        const { email, currentPassword } = req.body;
-        await firebaseAuth.deleteUser(userUid, email);
+        //const { email, currentPassword } = req.body;
+        await firebaseAuth.deleteUser(userUid);
         await sessionManagerService.deleteSession(userUid);
         await projectService.deleteAllProjects(userUid);
         res.status(204).json({ message: "Success" });

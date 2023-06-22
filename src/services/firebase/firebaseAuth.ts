@@ -47,8 +47,8 @@ class FirebaseAuth {
         console.log('Password updated successfully.');
     }
 
-    async deleteUser(userUid: string, email: string) {
-        await this.verifyUserEmail(userUid, email);
+    async deleteUser(userUid: string) {
+        //await this.verifyUserEmail(userUid, email);
         //await this.loginEmailPasswordBasedAccount(email, currentPassword);
         await this.adminAuth.deleteUser(userUid);
         console.log('User deleted successfully.');

@@ -6,11 +6,13 @@ interface ICustomRequest extends Request {
     userUid: string,
 }
 
+interface IUserCredentials {
+    email: string,
+    password: string,
+}
+
 interface ISignupRequest extends Request {
-    body: {
-        email: string,
-        password: string,
-    };
+    body: IUserCredentials;
 }
 
 interface ISigninRequest extends ISignupRequest { }
@@ -49,6 +51,8 @@ interface IProductUpdateRequest extends IProductAddRequest { }
 
 interface IProductDeleteRequest extends IProductAddRequest { }
 
+interface IProductReportGenerateRequest extends IProductAddRequest { }
+
 
 export {
     ICustomRequest,
@@ -61,4 +65,5 @@ export {
     IProductAddRequest,
     IProductUpdateRequest,
     IProductDeleteRequest,
+    IProductReportGenerateRequest,
 };

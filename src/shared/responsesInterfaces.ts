@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { ICustomUserRecord, IProduct, IProject } from './interfaces';
+import { ICustomUserRecord, IProduct, IProject, IReportJSON } from './interfaces';
 
 interface ExtendedResponse<T> extends Response {
     send(data: T): this;
@@ -36,6 +36,8 @@ interface IProductUpdateResponse extends ISuccessResponse { };
 
 interface IProductDeleteResponse extends ISuccessResponse { };
 
+interface IProductReportGenerateResponse extends ExtendedResponse<IReportJSON> { };
+
 export {
     IErrorResponse,
     IProfileUpdateResponse,
@@ -50,4 +52,5 @@ export {
     IProductAddResponse,
     IProductUpdateResponse,
     IProductDeleteResponse,
+    IProductReportGenerateResponse,
 };
