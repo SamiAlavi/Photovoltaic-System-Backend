@@ -7,6 +7,24 @@ import { IProductAddResponse, IProductDeleteResponse, IProductReportGenerateResp
 
 const router = Router();
 
+/**
+ * @swagger
+ * paths:
+ *   /:
+ *     get:
+ *       summary: Get user projects
+ *       tags:
+ *         - Projects
+ *       security:
+ *         - BearerAuth: []
+ *       responses:
+ *         '200':
+ *           description: Successful response with projects
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/IProjectsGetResponse'
+ */
 router.get(AppSettings.RouteBase, async (req: ICustomRequest, res: IProjectsGetResponse) => {
     try {
         const userUid = req.userUid;
@@ -18,6 +36,30 @@ router.get(AppSettings.RouteBase, async (req: ICustomRequest, res: IProjectsGetR
     }
 });
 
+/**
+ * @swagger
+ * paths:
+ *   /:
+ *     post:
+ *       summary: Create project
+ *       tags:
+ *         - Projects
+ *       security:
+ *         - BearerAuth: []
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/IProjectCreateRequest'
+ *       responses:
+ *         '200':
+ *           description: Project created successfully
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/IProjectCreateResponse'
+ */
 router.post(AppSettings.RouteBase, async (req: IProjectCreateRequest, res: IProjectCreateResponse) => {
     try {
         const userUid = req.userUid;
@@ -30,6 +72,30 @@ router.post(AppSettings.RouteBase, async (req: IProjectCreateRequest, res: IProj
     }
 });
 
+/**
+ * @swagger
+ * paths:
+ *   /:
+ *     delete:
+ *       summary: Delete project
+ *       tags:
+ *         - Projects
+ *       security:
+ *         - BearerAuth: []
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/IProjectDeleteRequest'
+ *       responses:
+ *         '200':
+ *           description: Project deleted successfully
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/IProjectDeleteResponse'
+ */
 router.delete(AppSettings.RouteBase, async (req: IProjectDeleteRequest, res: IProjectDeleteResponse) => {
     try {
         const userUid = req.userUid;
@@ -42,6 +108,30 @@ router.delete(AppSettings.RouteBase, async (req: IProjectDeleteRequest, res: IPr
     }
 });
 
+/**
+ * @swagger
+ * paths:
+ *   /product:
+ *     post:
+ *       summary: Add product
+ *       tags:
+ *         - Project's Products
+ *       security:
+ *         - BearerAuth: []
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/IProductAddRequest'
+ *       responses:
+ *         '200':
+ *           description: Product addition successful
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/IProductAddResponse'
+ */
 router.post(AppSettings.RouteAddEditDeleteProduct, async (req: IProductAddRequest, res: IProductAddResponse) => {
     try {
         const userUid = req.userUid;
@@ -54,6 +144,30 @@ router.post(AppSettings.RouteAddEditDeleteProduct, async (req: IProductAddReques
     }
 });
 
+/**
+ * @swagger
+ * paths:
+ *   /product:
+ *     put:
+ *       summary: Edit product
+ *       tags:
+ *         - Project's Products
+ *       security:
+ *         - BearerAuth: []
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/IProductUpdateRequest'
+ *       responses:
+ *         '200':
+ *           description: Product edit successful
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/IProductUpdateResponse'
+ */
 router.put(AppSettings.RouteAddEditDeleteProduct, async (req: IProductUpdateRequest, res: IProductUpdateResponse) => {
     try {
         const userUid = req.userUid;
@@ -66,6 +180,30 @@ router.put(AppSettings.RouteAddEditDeleteProduct, async (req: IProductUpdateRequ
     }
 });
 
+/**
+ * @swagger
+ * paths:
+ *   /product:
+ *     delete:
+ *       summary: Delete product
+ *       tags:
+ *         - Project's Products
+ *       security:
+ *         - BearerAuth: []
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/IProductDeleteRequest'
+ *       responses:
+ *         '200':
+ *           description: Product deletion successful
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/IProductDeleteResponse'
+ */
 router.delete(AppSettings.RouteAddEditDeleteProduct, async (req: IProductDeleteRequest, res: IProductDeleteResponse) => {
     try {
         const userUid = req.userUid;
@@ -78,6 +216,30 @@ router.delete(AppSettings.RouteAddEditDeleteProduct, async (req: IProductDeleteR
     }
 });
 
+/**
+ * @swagger
+ * paths:
+ *   /product/report:
+ *     post:
+ *       summary: Generate product report
+ *       tags:
+ *         - Project's Products
+ *       security:
+ *         - BearerAuth: []
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/IProductReportGenerateRequest'
+ *       responses:
+ *         '200':
+ *           description: Product report generated successfully
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/IProductReportGenerateResponse'
+ */
 router.post(AppSettings.RouteProductReport, async (req: IProductReportGenerateRequest, res: IProductReportGenerateResponse) => {
     try {
         const userUid = req.userUid;
