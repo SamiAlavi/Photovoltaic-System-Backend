@@ -29,7 +29,7 @@ router.get(AppSettings.RouteBase, async (req: ICustomRequest, res: IProjectsGetR
     try {
         const userUid = req.userUid;
         const projects = await projectService.getProjects(userUid);
-        res.json(projects);
+        res.status(200).json(projects);
     }
     catch (error: any) {
         Helpers.handleError(res, error);
@@ -53,7 +53,7 @@ router.get(AppSettings.RouteBase, async (req: ICustomRequest, res: IProjectsGetR
  *             schema:
  *               $ref: '#/components/schemas/IProjectCreateRequest'
  *       responses:
- *         '200':
+ *         '201':
  *           description: Project created successfully
  *           content:
  *             application/json:
@@ -89,7 +89,7 @@ router.post(AppSettings.RouteBase, async (req: IProjectCreateRequest, res: IProj
  *             schema:
  *               $ref: '#/components/schemas/IProjectDeleteRequest'
  *       responses:
- *         '200':
+ *         '204':
  *           description: Project deleted successfully
  *           content:
  *             application/json:
@@ -125,7 +125,7 @@ router.delete(AppSettings.RouteBase, async (req: IProjectDeleteRequest, res: IPr
  *             schema:
  *               $ref: '#/components/schemas/IProductAddRequest'
  *       responses:
- *         '200':
+ *         '201':
  *           description: Product addition successful
  *           content:
  *             application/json:
@@ -161,7 +161,7 @@ router.post(AppSettings.RouteAddEditDeleteProduct, async (req: IProductAddReques
  *             schema:
  *               $ref: '#/components/schemas/IProductUpdateRequest'
  *       responses:
- *         '200':
+ *         '204':
  *           description: Product edit successful
  *           content:
  *             application/json:
@@ -197,7 +197,7 @@ router.put(AppSettings.RouteAddEditDeleteProduct, async (req: IProductUpdateRequ
  *             schema:
  *               $ref: '#/components/schemas/IProductDeleteRequest'
  *       responses:
- *         '200':
+ *         '204':
  *           description: Product deletion successful
  *           content:
  *             application/json:

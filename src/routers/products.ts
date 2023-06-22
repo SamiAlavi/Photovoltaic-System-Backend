@@ -25,7 +25,7 @@ const router = Router();
 router.get(AppSettings.RouteBase, async (req: Request, res: IProductsGetResponse) => {
     try {
         const projects = await productService.getProducts();
-        res.json(projects);
+        res.status(200).json(projects);
     }
     catch (error: any) {
         Helpers.handleError(res, error);

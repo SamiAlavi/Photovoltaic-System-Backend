@@ -165,7 +165,7 @@ router.put(AppSettings.Profile, async (req: IProfileUpdateRequest, res: IProfile
  *             schema:
  *               $ref: '#/components/schemas/IProfileDeleteRequest'
  *       responses:
- *         '200':
+ *         '204':
  *           description: Profile deleted successfully
  *           content:
  *             application/json:
