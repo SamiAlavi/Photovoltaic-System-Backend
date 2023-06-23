@@ -33,6 +33,11 @@ const expiry = { expiresIn: `${environment.SESSION_TIMEOUT}ms` };
  *       responses:
  *         '200':
  *           description: User signup successful
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#components/schemas/ISignupResponse'  
+ *
  */
 
 router.post(AppSettings.RouteSignup, async (req: ISignupRequest, res: ISignupResponse) => {
@@ -44,7 +49,6 @@ router.post(AppSettings.RouteSignup, async (req: ISignupRequest, res: ISignupRes
         res.json(mappedUserDetails);
     }
     catch (error: any) {
-        // console.error('Error creating new user:', error);
         Helpers.handleError(res, error);
     }
 });
