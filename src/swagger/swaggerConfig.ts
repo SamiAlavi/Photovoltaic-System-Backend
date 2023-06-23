@@ -443,8 +443,19 @@ const swaggerConfig = {
                 "IProductReportGenerateResponse": {
                     "$ref": "#/components/schemas/IReportJSON"
                 }
+            },
+            "responses": {
+                "ErrorResponse": {
+                    "description": "Error response",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IErrorResponse",
+                            }
+                        }
+                    }
+                }
             }
-
         },
     },
     apis: ['./src/routers/*.ts'], // Specify the paths of your route files

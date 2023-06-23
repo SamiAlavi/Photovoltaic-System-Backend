@@ -24,6 +24,8 @@ const router = Router();
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/IProjectsGetResponse'
+ *         '400':
+ *           $ref: '#/components/responses/ErrorResponse'
  */
 router.get(AppSettings.RouteBase, async (req: ICustomRequest, res: IProjectsGetResponse) => {
     try {
@@ -59,6 +61,8 @@ router.get(AppSettings.RouteBase, async (req: ICustomRequest, res: IProjectsGetR
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/IProjectCreateResponse'
+ *         '400':
+ *           $ref: '#/components/responses/ErrorResponse'
  */
 router.post(AppSettings.RouteBase, async (req: IProjectCreateRequest, res: IProjectCreateResponse) => {
     try {
@@ -95,6 +99,8 @@ router.post(AppSettings.RouteBase, async (req: IProjectCreateRequest, res: IProj
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/IProjectDeleteResponse'
+ *         '400':
+ *           $ref: '#/components/responses/ErrorResponse'
  */
 router.delete(AppSettings.RouteBase, async (req: IProjectDeleteRequest, res: IProjectDeleteResponse) => {
     try {
@@ -131,6 +137,8 @@ router.delete(AppSettings.RouteBase, async (req: IProjectDeleteRequest, res: IPr
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/IProductAddResponse'
+ *         '400':
+ *           $ref: '#/components/responses/ErrorResponse'
  */
 router.post(AppSettings.RouteAddEditDeleteProduct, async (req: IProductAddRequest, res: IProductAddResponse) => {
     try {
@@ -167,6 +175,8 @@ router.post(AppSettings.RouteAddEditDeleteProduct, async (req: IProductAddReques
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/IProductUpdateResponse'
+ *         '400':
+ *           $ref: '#/components/responses/ErrorResponse'
  */
 router.put(AppSettings.RouteAddEditDeleteProduct, async (req: IProductUpdateRequest, res: IProductUpdateResponse) => {
     try {
@@ -203,6 +213,8 @@ router.put(AppSettings.RouteAddEditDeleteProduct, async (req: IProductUpdateRequ
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/IProductDeleteResponse'
+ *         '400':
+ *           $ref: '#/components/responses/ErrorResponse'
  */
 router.delete(AppSettings.RouteAddEditDeleteProduct, async (req: IProductDeleteRequest, res: IProductDeleteResponse) => {
     try {
@@ -239,6 +251,8 @@ router.delete(AppSettings.RouteAddEditDeleteProduct, async (req: IProductDeleteR
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/IProductReportGenerateResponse'
+ *         '400':
+ *           $ref: '#/components/responses/ErrorResponse'
  */
 router.post(AppSettings.RouteProductReport, async (req: IProductReportGenerateRequest, res: IProductReportGenerateResponse) => {
     try {

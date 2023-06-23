@@ -21,6 +21,8 @@ const router = Router();
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/IProductsGetResponse'
+ *         '400':
+ *           $ref: '#/components/responses/ErrorResponse'
  */
 router.get(AppSettings.RouteBase, async (req: Request, res: IProductsGetResponse) => {
     try {

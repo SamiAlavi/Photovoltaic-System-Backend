@@ -37,6 +37,8 @@ const expiry = { expiresIn: `${environment.SESSION_TIMEOUT}ms` };
  *             application/json:
  *               schema:
  *                 $ref: '#components/schemas/ISignupResponse'  
+ *         '400':
+ *           $ref: '#/components/responses/ErrorResponse'
  *
  */
 
@@ -74,6 +76,8 @@ router.post(AppSettings.RouteSignup, async (req: ISignupRequest, res: ISignupRes
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/ISigninResponse'
+ *         '400':
+ *           $ref: '#/components/responses/ErrorResponse'
  */
 router.post(AppSettings.RouteSignin, async (req: ISigninRequest, res: ISigninResponse) => {
     try {
@@ -105,6 +109,8 @@ router.post(AppSettings.RouteSignin, async (req: ISigninRequest, res: ISigninRes
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/ISignoutResponse'
+ *         '400':
+ *           $ref: '#/components/responses/ErrorResponse'
  */
 router.delete(AppSettings.RouteSignout, async (req: ICustomRequest, res: ISignoutResponse) => {
     try {
@@ -140,6 +146,8 @@ router.delete(AppSettings.RouteSignout, async (req: ICustomRequest, res: ISignou
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/IProfileUpdateResponse'
+ *         '400':
+ *           $ref: '#/components/responses/ErrorResponse'
  */
 router.put(AppSettings.Profile, async (req: IProfileUpdateRequest, res: IProfileUpdateResponse) => {
     try {
@@ -175,6 +183,8 @@ router.put(AppSettings.Profile, async (req: IProfileUpdateRequest, res: IProfile
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/IProfileDeleteResponse'
+ *         '400':
+ *           $ref: '#/components/responses/ErrorResponse'
  */
 router.delete(AppSettings.Profile, async (req: ICustomRequest, res: IProfileDeleteResponse) => {
     try {
