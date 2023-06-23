@@ -15,7 +15,22 @@ const swaggerConfig = {
                 url: "http://localhost:3000/api",
             },
         ],
+        security: {
+            BearerAuth: []
+        },
         components: {
+            "securitySchemes": {
+                "BearerAuth": {
+                    "type": "http",
+                    "scheme": "bearer",
+                    "bearerFormat": "JWT"
+                },
+                "X-UID": {
+                    "type": "apiKey",
+                    "in": "header",
+                    "name": "X-UID"
+                }
+            },
             "schemas": {
                 "ICustomUserRecord": {
                     "type": "object",

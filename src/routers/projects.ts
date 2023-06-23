@@ -17,6 +17,7 @@ const router = Router();
  *         - Projects
  *       security:
  *         - BearerAuth: []
+ *         - X-UID: []
  *       responses:
  *         '200':
  *           description: Successful response with projects
@@ -48,6 +49,7 @@ router.get(AppSettings.RouteBase, async (req: ICustomRequest, res: IProjectsGetR
  *         - Projects
  *       security:
  *         - BearerAuth: []
+ *         - X-UID: []
  *       requestBody:
  *         required: true
  *         content:
@@ -86,6 +88,7 @@ router.post(AppSettings.RouteBase, async (req: IProjectCreateRequest, res: IProj
  *         - Projects
  *       security:
  *         - BearerAuth: []
+ *         - X-UID: []
  *       requestBody:
  *         required: true
  *         content:
@@ -124,6 +127,7 @@ router.delete(AppSettings.RouteBase, async (req: IProjectDeleteRequest, res: IPr
  *         - Project's Products
  *       security:
  *         - BearerAuth: []
+ *         - X-UID: []
  *       requestBody:
  *         required: true
  *         content:
@@ -162,6 +166,7 @@ router.post(AppSettings.RouteAddEditDeleteProduct, async (req: IProductAddReques
  *         - Project's Products
  *       security:
  *         - BearerAuth: []
+ *         - X-UID: []
  *       requestBody:
  *         required: true
  *         content:
@@ -200,6 +205,7 @@ router.put(AppSettings.RouteAddEditDeleteProduct, async (req: IProductUpdateRequ
  *         - Project's Products
  *       security:
  *         - BearerAuth: []
+ *         - X-UID: []
  *       requestBody:
  *         required: true
  *         content:
@@ -238,6 +244,7 @@ router.delete(AppSettings.RouteAddEditDeleteProduct, async (req: IProductDeleteR
  *         - Project's Products
  *       security:
  *         - BearerAuth: []
+ *         - X-UID: []
  *       requestBody:
  *         required: true
  *         content:

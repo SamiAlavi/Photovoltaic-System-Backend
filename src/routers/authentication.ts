@@ -21,8 +21,6 @@ const expiry = { expiresIn: `${environment.SESSION_TIMEOUT}ms` };
  *     post:
  *       summary: User signup route
  *       description: Route for creating a new user account.
- *       tags:
- *         - Authentication
  *       requestBody:
  *         description: User credentials
  *         required: true
@@ -102,8 +100,11 @@ router.post(AppSettings.RouteSignin, async (req: ISigninRequest, res: ISigninRes
  *       summary: Sign out
  *       tags:
  *         - Authentication
+ *       security:
+ *         - BearerAuth: []
+ *         - X-UID: []
  *       responses:
- *         '200':
+ *         '204':
  *           description: Successful sign out
  *           content:
  *             application/json:
@@ -133,6 +134,7 @@ router.delete(AppSettings.RouteSignout, async (req: ICustomRequest, res: ISignou
  *         - Profile
  *       security:
  *         - BearerAuth: []
+ *         - X-UID: []
  *       requestBody:
  *         required: true
  *         content:
@@ -169,7 +171,7 @@ router.put(AppSettings.Profile, async (req: IProfileUpdateRequest, res: IProfile
  *       tags:
  *         - Profile
  *       security:
- *         - BearerAuth: []
+ *         - X-UID: []
  *       requestBody:
  *         required: true
  *         content:

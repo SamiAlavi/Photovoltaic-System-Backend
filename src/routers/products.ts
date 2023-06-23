@@ -14,6 +14,9 @@ const router = Router();
  *       summary: Get products
  *       tags:
  *         - Products
+ *       security:
+ *         - BearerAuth: []
+ *         - X-UID: []
  *       responses:
  *         '200':
  *           description: Successful response with products
