@@ -461,7 +461,17 @@ const swaggerConfig = {
             },
             "responses": {
                 "ErrorResponse": {
-                    "description": "Error response",
+                    "description": "Error",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IErrorResponse",
+                            }
+                        }
+                    }
+                },
+                "UnauthorizedResponse": {
+                    "description": "Missing/Invalid JWT token",
                     "content": {
                         "application/json": {
                             "schema": {

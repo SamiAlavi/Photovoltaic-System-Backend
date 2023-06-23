@@ -27,6 +27,8 @@ const router = Router();
  *                 $ref: '#/components/schemas/IProjectsGetResponse'
  *         '400':
  *           $ref: '#/components/responses/ErrorResponse'
+ *         '401':
+ *           $ref: '#/components/responses/UnauthorizedResponse'
  */
 router.get(AppSettings.RouteBase, async (req: ICustomRequest, res: IProjectsGetResponse) => {
     try {
@@ -65,6 +67,8 @@ router.get(AppSettings.RouteBase, async (req: ICustomRequest, res: IProjectsGetR
  *                 $ref: '#/components/schemas/IProjectCreateResponse'
  *         '400':
  *           $ref: '#/components/responses/ErrorResponse'
+ *         '401':
+ *           $ref: '#/components/responses/UnauthorizedResponse'
  */
 router.post(AppSettings.RouteBase, async (req: IProjectCreateRequest, res: IProjectCreateResponse) => {
     try {
@@ -104,6 +108,8 @@ router.post(AppSettings.RouteBase, async (req: IProjectCreateRequest, res: IProj
  *                 $ref: '#/components/schemas/IProjectDeleteResponse'
  *         '400':
  *           $ref: '#/components/responses/ErrorResponse'
+ *         '401':
+ *           $ref: '#/components/responses/UnauthorizedResponse'
  */
 router.delete(AppSettings.RouteBase, async (req: IProjectDeleteRequest, res: IProjectDeleteResponse) => {
     try {
@@ -143,6 +149,8 @@ router.delete(AppSettings.RouteBase, async (req: IProjectDeleteRequest, res: IPr
  *                 $ref: '#/components/schemas/IProductAddResponse'
  *         '400':
  *           $ref: '#/components/responses/ErrorResponse'
+ *         '401':
+ *           $ref: '#/components/responses/UnauthorizedResponse'
  */
 router.post(AppSettings.RouteAddEditDeleteProduct, async (req: IProductAddRequest, res: IProductAddResponse) => {
     try {
@@ -182,6 +190,8 @@ router.post(AppSettings.RouteAddEditDeleteProduct, async (req: IProductAddReques
  *                 $ref: '#/components/schemas/IProductUpdateResponse'
  *         '400':
  *           $ref: '#/components/responses/ErrorResponse'
+ *         '401':
+ *           $ref: '#/components/responses/UnauthorizedResponse'
  */
 router.put(AppSettings.RouteAddEditDeleteProduct, async (req: IProductUpdateRequest, res: IProductUpdateResponse) => {
     try {
@@ -221,6 +231,8 @@ router.put(AppSettings.RouteAddEditDeleteProduct, async (req: IProductUpdateRequ
  *                 $ref: '#/components/schemas/IProductDeleteResponse'
  *         '400':
  *           $ref: '#/components/responses/ErrorResponse'
+ *         '401':
+ *           $ref: '#/components/responses/UnauthorizedResponse'
  */
 router.delete(AppSettings.RouteAddEditDeleteProduct, async (req: IProductDeleteRequest, res: IProductDeleteResponse) => {
     try {
@@ -239,7 +251,7 @@ router.delete(AppSettings.RouteAddEditDeleteProduct, async (req: IProductDeleteR
  * paths:
  *   /project/product/report:
  *     post:
- *       summary: Generate product report
+ *       summary: Generate product report for last 30 days
  *       tags:
  *         - Project's Products
  *       security:
@@ -260,6 +272,8 @@ router.delete(AppSettings.RouteAddEditDeleteProduct, async (req: IProductDeleteR
  *                 $ref: '#/components/schemas/IProductReportGenerateResponse'
  *         '400':
  *           $ref: '#/components/responses/ErrorResponse'
+ *         '401':
+ *           $ref: '#/components/responses/UnauthorizedResponse'
  */
 router.post(AppSettings.RouteProductReport, async (req: IProductReportGenerateRequest, res: IProductReportGenerateResponse) => {
     try {

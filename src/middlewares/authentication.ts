@@ -28,6 +28,9 @@ const authenticate = async (req: ICustomRequest, res: IErrorResponse, next: Next
     const reqHeaders = req.headers;
     const token = reqHeaders.authorization?.split(' ').at(-1) ?? "";
     const userUid = reqHeaders['x-uid'] as string;
+    if (!userUid) {
+        return res.status(401).json({ message: 'Missing X-UID' });
+    }
 
     req.userUid = userUid;
     if (reqPath === `${AppSettings.RouteApi}${AppSettings.RouteSignout}`) {

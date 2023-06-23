@@ -26,6 +26,8 @@ const router = Router();
  *                 $ref: '#/components/schemas/IProductsGetResponse'
  *         '400':
  *           $ref: '#/components/responses/ErrorResponse'
+ *         '401':
+ *           $ref: '#/components/responses/UnauthorizedResponse'
  */
 router.get(AppSettings.RouteBase, async (req: Request, res: IProductsGetResponse) => {
     try {
