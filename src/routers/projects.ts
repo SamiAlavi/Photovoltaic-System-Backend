@@ -1,4 +1,4 @@
-import { Router, Response } from 'express';
+import { Router } from 'express';
 import projectService from "../services/projectService";
 import AppSettings from '../../AppSettings';
 import { ICustomRequest, IProductAddRequest, IProductDeleteRequest, IProductReportGenerateRequest, IProductUpdateRequest, IProjectCreateRequest, IProjectDeleteRequest } from '../shared/requestsInterfaces';

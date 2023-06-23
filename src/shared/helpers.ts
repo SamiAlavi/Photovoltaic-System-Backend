@@ -29,11 +29,12 @@ class Helpers {
     }
 
     static handleError(res: Response, error: Error) {
-        res.status(400).json({
+        console.log(error);
+        const response = {
             message: error.message,
-        });
+        };
+        res.status(400).json(response);
     }
-
 }
 
 export default Helpers;
