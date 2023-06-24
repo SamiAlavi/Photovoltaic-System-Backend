@@ -11,15 +11,21 @@ class EmailService {
         sgMail.setApiKey(environment.APIKEY_SENDGRID);
     }
 
-    private createTableRow(product: IProductDetail) {
-        const { name, id, model, timestamp } = product;
+    private createProductTableRow(product: IProductDetail) {
+        const { id, name, region, model, timestamp } = product;
         const date = (new Date(timestamp)).toUTCString();
-        return `<tr><td>${name}</td><td>${id}</td><td>${model}</td><td>${date}</td></tr>`;
+        return this.createTableRow([id, name, region, model, date], false, "");
+    }
+
+    private createTableRow(values: string[], isHeader: boolean, style: string): string {
+        const tag = isHeader ? "th" : "td";
+        return `<tr ${style}>${values.map((value) => `<${tag}>${value}</${tag}>`).join('')}</tr>`;
     }
 
     async sendEmail(userEmail: string, filePaths: string[], products: IProductDetail[]) {
         filePaths = filePaths.filter((filePath) => !!filePath);
         const attachments = [];
+        const headers = ["ID", "Name", "Region", "Model", "Product Created At"];
         const isSingular = filePaths.length === 1;
         let count = 0;
         let html = 'Here ';
@@ -30,7 +36,7 @@ class EmailService {
             html += 'are your reports for the following products';
         }
         html += ':<br><table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse;">';
-        html += '<tr style="background-color: #f2f2f2;"><th>Name</th><th>ID</th><th>Model</th><th>Product Created At</th></tr>';
+        html += this.createTableRow(headers, true, 'style="background-color: #f2f2f2;"');
 
         for (let i = 0; i < filePaths.length; i++) {
             const filePath = filePaths[i];
@@ -42,14 +48,14 @@ class EmailService {
                 type: 'text/csv',
                 disposition: 'attachment',
             });
-            html += this.createTableRow(product);
+            html += this.createProductTableRow(product);
             count++;
         }
         html += '</table>';
         const msg: MailDataRequired = {
             to: userEmail,
             from: this.verifiedSender,
-            subject: `Reports Generated (${count})`,
+            subject: `Electricity Reports Generated (${count})`,
             html: html,
             attachments: attachments,
         };
