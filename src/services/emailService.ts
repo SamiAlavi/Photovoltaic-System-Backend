@@ -13,7 +13,8 @@ class EmailService {
 
     private createTableRow(product: IProductDetail) {
         const { name, id, model, timestamp } = product;
-        return `<tr><td>${name}</td><td>${id}</td><td>${model}</td><td>${new Date(timestamp)}</td></tr>`;
+        const date = (new Date(timestamp)).toUTCString();
+        return `<tr><td>${name}</td><td>${id}</td><td>${model}</td><td>${date}</td></tr>`;
     }
 
     async sendEmail(userEmail: string, filePaths: string[], products: IProductDetail[]) {
