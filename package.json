@@ -5,7 +5,8 @@
         "init": "ts-node initScript.ts",
         "start": "nodemon index.ts",
         "build": "npx tsc",
-        "test": "ts-node test.ts,"
+        "test": "ts-node test.ts",
+        "dev-test": "ts-node dev-test.ts"
     },
     "dependencies": {
         "@sendgrid/mail": "^7.7.0",

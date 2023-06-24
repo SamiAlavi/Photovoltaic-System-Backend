@@ -128,12 +128,27 @@ class CloudFirestore {
                 await docRef.update(data);
             }
             catch {
-                await docRef.set(data);
+                await this.setDocument(collectionRef, documentId, data);
             }
             console.log(`Document updated successfully! (${documentId})`);
         }
         catch (error: any) {
             this.handleError(error, `Error updating document (${documentId})`);
+        }
+    }
+
+    setDocument(collectionName: string, documentId: string, data: {}): Promise<any>;
+    setDocument(collectionName: CollectionReferenceDocumentData, documentId: string, data: {}): Promise<any>;
+
+    async setDocument(collection: string | CollectionReferenceDocumentData, documentId: string, data: {}): Promise<any> {
+        try {
+            const collectionRef = this.getCollection(collection);
+            const docRef = collectionRef.doc(documentId);
+            await docRef.set(data);
+            console.log(`Document set successfully! (${documentId})`);
+        }
+        catch (error: any) {
+            this.handleError(error, `Error setting document (${documentId})`);
         }
     }
 

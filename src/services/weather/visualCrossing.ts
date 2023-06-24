@@ -28,6 +28,7 @@ class VisualCrossing {
             include: "hours", //days,hours
             //elements: "datetime,solarradiation",
             unitGroup: "metric",
+            iconSet: "icons2",
             options: "noheaders,nonulls",
         };
         const query = Helpers.getQueryParameters(queryParams);

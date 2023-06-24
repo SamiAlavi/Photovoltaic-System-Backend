@@ -49,7 +49,7 @@ class Weather {
         const formattedDate = Helpers.getFormattedDate(date);
         const document: IWeatherData = await cloudFirestoreService.getDocument(this.weatherCollection, documentId);
         delete document[formattedDate];
-        const result = await cloudFirestoreService.updateDocument(this.weatherCollection, documentId, document);
+        const result = await cloudFirestoreService.setDocument(this.weatherCollection, documentId, document);
     }
 
     async getLast30DaysWeatherData(region: string): Promise<IReportData> {
