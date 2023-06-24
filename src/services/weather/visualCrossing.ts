@@ -2,6 +2,7 @@ import axios from "axios";
 import enviroment from '../../../env';
 import Helpers from "../../shared/helpers";
 import { IVisualCrossingDailyForecastData } from "./interface-visualCrossing";
+import { MeasurementUnitVisualCrossing } from "./enums";
 
 class VisualCrossing {
     private readonly API_KEY = enviroment.APIKEY_VISUALCROSSING;
@@ -27,7 +28,7 @@ class VisualCrossing {
             key: this.API_KEY,
             include: "hours", //days,hours
             //elements: "datetime,solarradiation",
-            unitGroup: "metric",
+            unitGroup: MeasurementUnitVisualCrossing.METRIC,
             iconSet: "icons2",
             options: "noheaders,nonulls",
         };
