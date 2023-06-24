@@ -102,17 +102,22 @@ const on30DaysCompleted = (days30Completed: { [key: string]: IProductDetail[]; }
 };
 
 const callback = async () => {
-    console.log(`Cron Job ran at ${new Date()}`);
+    try {
+        console.log(`Cron Job ran at ${new Date()}`);
 
-    const collections = await projectService.getAllUsersCollections();
-    const { days30Completed, forwardMap, reverseMap } = getMappings(collections);
-    on30DaysCompleted(days30Completed);
-    for (let region in reverseMap) {
-        let coords = reverseMap[region];
-        for (let i = 0; i < coords.length; i++) {
-            const [lng, lat, ..._] = coords[i].split(",").map(Number);
-            weatherService.addTodayWeatherDataInRegion(region, lng, lat);
+        const collections = await projectService.getAllUsersCollections();
+        const { days30Completed, forwardMap, reverseMap } = getMappings(collections);
+        on30DaysCompleted(days30Completed);
+        for (let region in reverseMap) {
+            let coords = reverseMap[region];
+            for (let i = 0; i < coords.length; i++) {
+                const [lng, lat, ..._] = coords[i].split(",").map(Number);
+                weatherService.addTodayWeatherDataInRegion(region, lng, lat);
+            }
         }
+    }
+    catch (error: any) {
+        console.log(error);
     }
 };
 

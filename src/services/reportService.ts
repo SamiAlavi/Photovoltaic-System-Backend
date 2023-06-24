@@ -93,25 +93,18 @@ class ReportService {
             const weatherData = await weatherService.getLast30DaysWeatherData(region);
             return this.generateJSON(product, weatherData);
         }
-        catch {
-
+        catch (error: any) {
+            throw Error(error.response?.data);
         }
-        const row = {
-            datetimes: [],
-            electrictyProduced: [],
-        };
-        return { hourly: row, daily: row };
     }
 
     private generateJSON(product: IProductDetail, weatherData: IReportData): IReportJSON {
-
         const hourlyXAxis: string[] = [];
         const hourlyYAxis: number[] = [];
         const dailyXAxis: string[] = [];
         const dailyYAxis: number[] = [];
 
         try {
-
             const sortedDatesData = Helpers.sortObjectKeys(weatherData) as IReportData;
 
             Object.entries(sortedDatesData).forEach(([date, timeValues]) => {
