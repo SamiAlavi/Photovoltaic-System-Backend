@@ -1,5 +1,5 @@
 import { ORIENTATION } from './enums';
-import { CurrentConditions } from '../services/weather/interface-visualCrossing';
+import { Hour } from '../services/weather/interface-visualCrossing';
 
 interface ICustomUserRecord {
     uid: string,
@@ -45,7 +45,7 @@ interface IProjectCollection {
 }
 
 interface IWeatherData {
-    [key: string]: CurrentConditions[];
+    [key: string]: Hour[];
 }
 
 interface IReportDataRow {

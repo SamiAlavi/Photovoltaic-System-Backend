@@ -26,7 +26,8 @@ class VisualCrossing {
         const queryParams = {
             key: this.API_KEY,
             include: "hours", //days,hours
-            elements: "datetime,solarradiation",
+            //elements: "datetime,solarradiation",
+            unitGroup: "metric",
             options: "noheaders,nonulls",
         };
         const query = Helpers.getQueryParameters(queryParams);
