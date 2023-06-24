@@ -40,6 +40,18 @@ class Weather {
         return weatherDocument;
     }
 
+    async getWeatherCollectionIds(): Promise<string[]> {
+        const weatherIds = await cloudFirestoreService.getDocumentsIds(this.weatherCollection);
+        return weatherIds;
+    }
+
+    async deleteWeatherDateData(documentId: string, date: Date) {
+        const formattedDate = Helpers.getFormattedDate(date);
+        const document: IWeatherData = await cloudFirestoreService.getDocument(this.weatherCollection, documentId);
+        delete document[formattedDate];
+        const result = await cloudFirestoreService.updateDocument(this.weatherCollection, documentId, document);
+    }
+
     async getLast30DaysWeatherData(region: string): Promise<IReportData> {
         const reportData: IReportData = {};
         const weatherDocument = await this.getWeatherData(region);
