@@ -65,10 +65,22 @@ export interface Hour extends WeatherData {
 }
 
 export enum Icon {
-    Cloudy = "cloudy",
-    PartlyCloudyDay = "partly-cloudy-day",
-    PartlyCloudyNight = "partly-cloudy-night",
-    Rain = "rain",
+    Snow = 'snow',
+    SnowShowersDay = 'snow-showers-day',
+    SnowShowersNight = 'snow-showers-night',
+    ThunderRain = 'thunder-rain',
+    ThunderShowersDay = 'thunder-showers-day',
+    ThunderShowersNight = 'thunder-showers-night',
+    Rain = 'rain',
+    ShowersDay = 'showers-day',
+    ShowersNight = 'showers-night',
+    Fog = 'fog',
+    Wind = 'wind',
+    Cloudy = 'cloudy',
+    PartlyCloudyDay = 'partly-cloudy-day',
+    PartlyCloudyNight = 'partly-cloudy-night',
+    ClearDay = 'clear-day',
+    ClearNight = 'clear-night'
 }
 
 export enum Source {
