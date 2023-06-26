@@ -7,10 +7,20 @@ class Weather {
     private weatherKey = "weather";
     private weatherCollection = cloudFirestoreService.database.collection(this.weatherKey);
 
+    private async weatherDataExists(region: string, formattedDate: string): Promise<boolean> {
+        try {
+            const weatherDataKeys = await this.getWeatherDataKeys(region);
+            const weatherDataExists = weatherDataKeys.includes(formattedDate);
+            return weatherDataExists;
+        }
+        catch (error: any) {
+            return false;
+        }
+    }
+
     async addTodayWeatherDataInRegion(region: string, longitiude: number, latitude: number): Promise<boolean> {
         const formattedDate = Helpers.getFormattedDate(new Date());
-        const weatherDataKeys = await this.getWeatherDataKeys(region);
-        const weatherDataExists = weatherDataKeys.includes(formattedDate);
+        const weatherDataExists = await this.weatherDataExists(region, formattedDate);
         if (weatherDataExists) {
             return false;
         }

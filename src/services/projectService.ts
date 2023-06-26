@@ -61,7 +61,8 @@ class ProjectService {
     async addProductInProject(userUid: string, projectId: string, product: IProductDetail) {
         const project = await this.getProject(userUid, projectId);
         project.products.push(product);
-        this.updateProject(userUid, project);
+        await this.updateProject(userUid, project);
+        await weatherService.addTodayWeatherDataInRegion(product.region, product.lng, product.lat);
     }
 
     async editProductInProject(userUid: string, projectId: string, product: IProductDetail) {
@@ -81,7 +82,7 @@ class ProjectService {
 
 
     updateProject(userUid: string, project: IProject) {
-        cloudFirestoreService.updateDocument(this.getUserProjectsCollection(userUid), project.id, project);
+        return cloudFirestoreService.updateDocument(this.getUserProjectsCollection(userUid), project.id, project);
     }
 
     async getAllUsersCollections(): Promise<IProjectCollection[]> {
