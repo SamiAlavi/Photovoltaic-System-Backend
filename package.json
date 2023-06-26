@@ -2,11 +2,12 @@
     "main": "index.js",
     "name": "photovoltaic-system-backend",
     "scripts": {
-        "init": "ts-node initScript.ts",
+        "init": "ts-node ./extra/initScript.ts",
         "start": "nodemon index.ts",
         "build": "npx tsc",
-        "test": "ts-node test.ts",
-        "dev-test": "ts-node dev-test.ts"
+        "dev-test": "ts-node ./extra/dev-test.ts",
+        "backup-db": "ts-node ./extra/backup-db.ts",
+        "restore-db": "ts-node ./extra/restore-db.ts"
     },
     "dependencies": {
         "@sendgrid/mail": "^7.7.0",

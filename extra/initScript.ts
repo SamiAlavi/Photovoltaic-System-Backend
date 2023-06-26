@@ -1,6 +1,6 @@
-import productTypes from "./init/productsTypes";
-import cloudFirestore from "./src/services/firebase/cloudFirestore";
-import { ICustomUserRecord, IProductDetail, IWeatherData } from "./src/shared/interfaces";
+import productTypes from "../init/productsTypes";
+import cloudFirestore from "../src/services/firebase/cloudFirestore";
+import { ICustomUserRecord, IProductDetail, IWeatherData } from "../src/shared/interfaces";
 
 const tempDocumentId = "_temp";
 
