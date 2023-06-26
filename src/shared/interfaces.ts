@@ -52,6 +52,7 @@ interface IReportDataRow {
     datetime: string,
     solarradiation: number,
     electricityGenerated?: number,
+    icon?: string,
 }
 
 interface IReportData {

@@ -73,6 +73,17 @@ class Weather {
         return reportData;
     }
 
+    async getCurrentTimeWeatherIcon(region: string): Promise<string> {
+        const date = new Date();
+        const formattedDate = Helpers.getFormattedDate(date);
+        const formattedTime = Helpers.getFormattedTime(date);
+
+        const weather = await this.getWeatherData(region);
+        const timeWeather = weather[formattedDate].find((timeWeather) => timeWeather.datetime === formattedTime);
+        const icon = timeWeather?.icon ?? '';
+        return icon;
+    }
+
 }
 
 export default new Weather();
