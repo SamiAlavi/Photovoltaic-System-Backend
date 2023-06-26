@@ -112,7 +112,6 @@ class ReportService {
                 Object.values(timeValues).forEach((timeValue) => {
                     const solarRadiation = timeValue?.solarradiation ?? 0;
                     let electricityGenerated = 0;
-                    const powerConversionEfficiency = 1; // TODO
                     if (solarRadiation) {
                         electricityGenerated = electrictyCalculator.calculateElectricityProduced(
                             solarRadiation,
@@ -121,7 +120,7 @@ class ReportService {
                             product.tiltAngle,
                             product.area,
                             product.num_panels,
-                            powerConversionEfficiency
+                            product.efficiency
                         );
                     }
                     electricityGenerated /= 1000; //kWh
