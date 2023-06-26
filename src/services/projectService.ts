@@ -2,13 +2,20 @@ import { IProductDetail, IProject, IProjectCollection, IReportData, IReportJSON 
 import emailService from './emailService';
 import cloudFirestoreService from './firebase/cloudFirestore';
 import firebaseAuth from './firebase/firebaseAuth';
-import { CollectionReferenceDocumentData } from './firebase/types';
+import { CollectionReferenceDocumentData, CollectionsList } from './firebase/types';
 import reportService from './reportService';
 import weatherService from './weather/weather';
 
 class ProjectService {
     private projectsKey = "projects";
     private projectsDocument = cloudFirestoreService.database.collection(this.projectsKey).doc(this.projectsKey);
+
+    async getAllProjectsCollections(): Promise<CollectionsList> {
+        return await cloudFirestoreService.getAllCollectionsInDocument(this.projectsDocument);
+    }
+    async getAllProjectsCollectionsData(): Promise<any[]> {
+        return await cloudFirestoreService.getAllCollectionsDataInDocument(this.projectsDocument);
+    }
 
     private getUserProjectsCollection(userUid: string): CollectionReferenceDocumentData {
         return this.projectsDocument.collection(userUid);

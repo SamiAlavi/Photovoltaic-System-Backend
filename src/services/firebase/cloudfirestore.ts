@@ -1,13 +1,22 @@
 import admin from 'firebase-admin';
 import { firebaseAdminApp } from './firebase';
-import { CollectionReferenceOrQuery, CollectionReferenceDocumentData, DocumentData, WhereCondition, DocumentReference } from './types';
+import { CollectionReferenceOrQuery, CollectionReferenceDocumentData, DocumentData, WhereCondition, DocumentReference, CollectionsList } from './types';
 
 class CloudFirestore {
     private readonly TEMP_FILE_PREFIX = "_";
     database = admin.firestore(firebaseAdminApp);
 
-    async getAllCollectionsDataInDocument(documentRef: DocumentData): Promise<any> {
+    async getRootCollectionsData(): Promise<any> {
+        return this.getAllCollectionsDataInDocument(this.database);
+    }
+
+    async getAllCollectionsInDocument(documentRef: DocumentData): Promise<CollectionsList> {
         const collections = await documentRef.listCollections();
+        return collections.filter((collection) => !collection.id.startsWith(this.TEMP_FILE_PREFIX));
+    }
+
+    async getAllCollectionsDataInDocument(documentRef: DocumentData): Promise<any> {
+        const collections = await this.getAllCollectionsInDocument(documentRef);
         const collectionData = [];
 
         for (const collection of collections) {

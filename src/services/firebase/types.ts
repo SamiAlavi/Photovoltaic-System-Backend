@@ -8,6 +8,7 @@ type CollectionReferenceDocumentData = CollectionReference<DocumentData>;
 type QueryDocumentData = Query<DocumentData>;
 type CollectionReferenceOrQuery = CollectionReferenceDocumentData | QueryDocumentData;
 type DocumentReference = firestore.DocumentReference<DocumentData>;
+type CollectionsList = CollectionReference<DocumentData>[];
 
 export {
     WhereCondition,
@@ -16,4 +17,5 @@ export {
     QueryDocumentData,
     DocumentReference,
     DocumentData,
+    CollectionsList,
 };
