@@ -112,7 +112,7 @@ class ReportService {
                 Object.values(timeValues).forEach((timeValue) => {
                     const solarRadiation = timeValue?.solarradiation ?? 0;
                     let electricityGenerated = 0;
-                    const powerConversionEfficiency = 1;
+                    const powerConversionEfficiency = 1; // TODO
                     if (solarRadiation) {
                         electricityGenerated = electrictyCalculator.calculateElectricityProduced(
                             solarRadiation,

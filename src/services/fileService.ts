@@ -17,6 +17,10 @@ class FileService {
         });
     }
 
+    readFileSync(filePath: string, encoding: BufferEncoding): string {
+        return fs.readFileSync(filePath, encoding);
+    }
+
 
     readFileSyncBase64(filePath: string): string {
         return fs.readFileSync(filePath).toString('base64');

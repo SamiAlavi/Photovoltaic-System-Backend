@@ -9,7 +9,9 @@ class Weather {
 
     async addTodayWeatherDataInRegion(region: string, longitiude: number, latitude: number): Promise<boolean> {
         const formattedDate = Helpers.getFormattedDate(new Date());
-        if (await cloudFirestoreService.propertyInDocumentExists(this.weatherCollection, region, formattedDate)) {
+        const weatherDataKeys = await this.getWeatherDataKeys(region);
+        const weatherDataExists = weatherDataKeys.includes(formattedDate);
+        if (weatherDataExists) {
             return false;
         }
         const response = await visualCrossingService.getTodayForecast(latitude, longitiude);
@@ -22,10 +24,11 @@ class Weather {
         const date = new Date();
         const last30days = 30;
         const step = 1;
+        const weatherDataKeys = await this.getWeatherDataKeys(region);
         for (let i = 1; i <= last30days; i++) {
             date.setDate(date.getDate() - step);
             const formattedDate = Helpers.getFormattedDate(date);
-            const weatherDataExists = await cloudFirestoreService.propertyInDocumentExists(this.weatherCollection, region, formattedDate);
+            const weatherDataExists = weatherDataKeys.includes(formattedDate);
             if (weatherDataExists) {
                 continue;
             }
@@ -40,6 +43,10 @@ class Weather {
         return weatherDocument;
     }
 
+    async getWeatherDataKeys(region: string): Promise<string[]> {
+        return Object.keys(await this.getWeatherData(region));
+    }
+
     async getWeatherCollectionIds(): Promise<string[]> {
         const weatherIds = await cloudFirestoreService.getDocumentsIds(this.weatherCollection);
         return weatherIds;
@@ -49,7 +56,7 @@ class Weather {
         const formattedDate = Helpers.getFormattedDate(date);
         const document: IWeatherData = await cloudFirestoreService.getDocument(this.weatherCollection, documentId);
         delete document[formattedDate];
-        const result = await cloudFirestoreService.setDocument(this.weatherCollection, documentId, document);
+        return cloudFirestoreService.setDocument(this.weatherCollection, documentId, document);
     }
 
     async getLast30DaysWeatherData(region: string): Promise<IReportData> {
