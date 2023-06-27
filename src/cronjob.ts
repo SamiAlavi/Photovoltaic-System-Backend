@@ -27,11 +27,14 @@ const getMappings = (collections: IProjectCollection[]) => {
             const products = project.products;
             for (let k = 0; k < products.length; k++) {
                 const product = products[k];
-                const { lng, lat, region, timestamp } = product;
+                const { lng, lat, region, timestamp, isActive } = product;
+                if (!isActive) {
+                    continue;
+                }
                 const key = `${lng},${lat}`;
                 const value = region || key;
                 const timeDifference = Math.abs(Date.now() - timestamp);
-                if (product.isActive && timeDifference >= millisecondsPer30Days) {
+                if (timeDifference >= millisecondsPer30Days) {
                     const key = `${userId}~${project.id}`;
                     try {
                         days30Completed[key].push(product);
