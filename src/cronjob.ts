@@ -19,17 +19,15 @@ const getMappings = (collections: IProjectCollection[]) => {
     const forwardMap: { [key: string]: string; } = {};
     const reverseMap: { [key: string]: string[]; } = {};
 
-    for (let i = 0; i < collections.length; i++) {
-        const userId = collections[i].collectionId;
-        const projects = collections[i].documents;
-        for (let j = 0; j < projects.length; j++) {
-            const project = projects[j];
+    collections.forEach((collection) => {
+        const userId = collection.collectionId;
+        const projects = collection.documents;
+        projects.forEach((project) => {
             const products = project.products;
-            for (let k = 0; k < products.length; k++) {
-                const product = products[k];
+            products.forEach((product) => {
                 const { lng, lat, region, timestamp, isActive } = product;
                 if (!isActive) {
-                    continue;
+                    return;
                 }
                 const key = `${lng},${lat}`;
                 const value = region || key;
@@ -42,7 +40,7 @@ const getMappings = (collections: IProjectCollection[]) => {
                     catch {
                         days30Completed[key] = [product];
                     }
-                    continue;
+                    return;
                 }
                 forwardMap[key] = value;
                 try {
@@ -51,9 +49,9 @@ const getMappings = (collections: IProjectCollection[]) => {
                 catch (error) {
                     reverseMap[value] = [key];
                 }
-            }
-        }
-    }
+            });
+        });
+    });
     return { days30Completed, forwardMap, reverseMap };
 };
 
