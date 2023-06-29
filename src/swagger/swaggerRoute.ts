@@ -1,4 +1,4 @@
-import swaggerUi from 'swagger-ui-express';
+import swaggerUi, { SwaggerUiOptions } from 'swagger-ui-express';
 import swaggerConfig from './swaggerConfig';
 import swaggerJSDoc from 'swagger-jsdoc';
 import { Request, Response, Router } from 'express';
@@ -7,6 +7,9 @@ import fileService from '../services/fileService';
 
 const router = Router();
 const swaggerSpec = swaggerJSDoc(swaggerConfig);
+const swaggerOptions: SwaggerUiOptions = {
+    explorer: true,
+};
 
 function writeSwaggerConfig(filePath: string) {
     const swaggerJson = JSON.stringify(swaggerSpec, null, 4);
@@ -19,7 +22,7 @@ router.get(AppSettings.RouteSwaggerJSON, (req: Request, res: Response) => {
     res.send(swaggerJson);
 });
 
-router.use(AppSettings.RouteSwagger, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+router.use(AppSettings.RouteSwagger, swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerOptions));
 
 // writeSwaggerConfig('swagger.json');
 
