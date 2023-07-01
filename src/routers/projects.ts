@@ -100,7 +100,7 @@ router.post(AppSettings.RouteBase, async (req: IProjectCreateRequest, res: IProj
  *             schema:
  *               $ref: '#/components/schemas/IProjectDeleteRequest'
  *       responses:
- *         '204':
+ *         '200':
  *           description: Project deleted successfully
  *           content:
  *             application/json:
@@ -116,7 +116,7 @@ router.delete(AppSettings.RouteBase, async (req: IProjectDeleteRequest, res: IPr
         const userUid = req.userUid;
         const { projectId } = req.body;
         projectService.deleteProject(userUid, projectId);
-        res.status(204).json(true);
+        res.status(200).json(true);
     }
     catch (error: any) {
         Helpers.handleError(res, error);
@@ -182,7 +182,7 @@ router.post(AppSettings.RouteAddEditDeleteProduct, async (req: IProductAddReques
  *             schema:
  *               $ref: '#/components/schemas/IProductUpdateRequest'
  *       responses:
- *         '204':
+ *         '200':
  *           description: Product edit successful
  *           content:
  *             application/json:
@@ -198,7 +198,7 @@ router.put(AppSettings.RouteAddEditDeleteProduct, async (req: IProductUpdateRequ
         const userUid = req.userUid;
         const { projectId, product } = req.body;
         projectService.editProductInProject(userUid, projectId, product);
-        res.status(204).json({ message: "Success" });
+        res.status(200).json({ message: "Success" });
     }
     catch (error: any) {
         Helpers.handleError(res, error);
@@ -223,7 +223,7 @@ router.put(AppSettings.RouteAddEditDeleteProduct, async (req: IProductUpdateRequ
  *             schema:
  *               $ref: '#/components/schemas/IProductDeleteRequest'
  *       responses:
- *         '204':
+ *         '200':
  *           description: Product deletion successful
  *           content:
  *             application/json:
@@ -239,7 +239,7 @@ router.delete(AppSettings.RouteAddEditDeleteProduct, async (req: IProductDeleteR
         const userUid = req.userUid;
         const { projectId, product } = req.body;
         projectService.deleteProductInProject(userUid, projectId, product);
-        res.status(204).json({ message: "Success" });
+        res.status(200).json({ message: "Success" });
     }
     catch (error: any) {
         Helpers.handleError(res, error);

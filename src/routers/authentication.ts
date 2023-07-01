@@ -104,7 +104,7 @@ router.post(AppSettings.RouteSignin, async (req: ISigninRequest, res: ISigninRes
  *         - BearerAuth: []
  *         - X-UID: []
  *       responses:
- *         '204':
+ *         '200':
  *           description: Successful sign out
  *           content:
  *             application/json:
@@ -117,7 +117,7 @@ router.delete(AppSettings.RouteSignout, async (req: ICustomRequest, res: ISignou
     try {
         const userUid = req.userUid;
         sessionManagerService.deleteSession(userUid);
-        res.status(204).json({ message: 'Success' });
+        res.status(200).json({ message: 'Success' });
     }
     catch (error: any) {
         Helpers.handleError(res, error);
@@ -179,7 +179,7 @@ router.put(AppSettings.Profile, async (req: IProfileUpdateRequest, res: IProfile
  *             schema:
  *               $ref: '#/components/schemas/IProfileDeleteRequest'
  *       responses:
- *         '204':
+ *         '200':
  *           description: Profile deleted successfully
  *           content:
  *             application/json:
@@ -195,7 +195,7 @@ router.delete(AppSettings.Profile, async (req: ICustomRequest, res: IProfileDele
         await firebaseAuth.deleteUser(userUid);
         await sessionManagerService.deleteSession(userUid);
         await projectService.deleteAllProjects(userUid);
-        res.status(204).json({ message: "Success" });
+        res.status(200).json({ message: "Success" });
     }
     catch (error: any) {
         Helpers.handleError(res, error);
