@@ -43,13 +43,13 @@ class ReportService {
                     if (solarRadiation) {
                         electricityGenerated = electrictyCalculator.calculateElectricityProduced(
                             solarRadiation,
-                            product.power_peak, // W
+                            product.power_peak,
                             product.orientation,
                             product.tiltAngle,
-                            product.area, // m^2
+                            product.area,
                             product.num_panels,
                             product.efficiency,
-                        ) / 1000; // units kWh
+                        );
                     }
                     dateTimeEntry.electricityGenerated = electricityGenerated;
                     acc[date] = electricityGenerated;
