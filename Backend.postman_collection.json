@@ -1,0 +1,152 @@
+{
+	"info": {
+		"_postman_id": "c2d7fed0-d117-409c-85f5-ec47cb2b285b",
+		"name": "Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31835835"
+	},
+	"item": [
+		{
+			"name": "signin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"test@gmail.com\",\r\n    \"password\": \"test123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/signin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"aa@gmail.com\",\r\n    \"password\": \"612121\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/test",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJvVUNqM0VBTkQ5T2ZZdVZ4bmpGMkZjcm8xQjczIiwiZW1haWwiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjEzMDczNiwiZXhwIjoxNjg2NzM1NTM2fQ.89qKUhZfRprtF7RLrksGPhHwFE1D-vQUylSaiD3er2M",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-UID",
+						"value": "oUCj3EAND9OfYuVxnjF2Fcro1B73",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://api.mapbox.com/geocoding/v5/mapbox.places/50,50.json?types=place,district&limit=1&access_token=pk.eyJ1Ijoic2FtaWFsYXZpIiwiYSI6ImNsaWxuM3E0NTBiODIzZ212OGR1aTNmMnQifQ.f-oxF72sSsV2I7-wwlVN2g",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.mapbox.com/geocoding/v5/mapbox.places/50,50.json?types=place,district&limit=1&access_token=pk.eyJ1Ijoic2FtaWFsYXZpIiwiYSI6ImNsaWxuM3E0NTBiODIzZ212OGR1aTNmMnQifQ.f-oxF72sSsV2I7-wwlVN2g",
+					"protocol": "https",
+					"host": [
+						"api",
+						"mapbox",
+						"com"
+					],
+					"path": [
+						"geocoding",
+						"v5",
+						"mapbox.places",
+						"50,50.json"
+					],
+					"query": [
+						{
+							"key": "types",
+							"value": "place,district"
+						},
+						{
+							"key": "limit",
+							"value": "1"
+						},
+						{
+							"key": "access_token",
+							"value": "pk.eyJ1Ijoic2FtaWFsYXZpIiwiYSI6ImNsaWxuM3E0NTBiODIzZ212OGR1aTNmMnQifQ.f-oxF72sSsV2I7-wwlVN2g"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
